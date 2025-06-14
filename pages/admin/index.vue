@@ -49,6 +49,44 @@
             </nuxt-link>
           </template>
           <div v-else>Список пуст</div>
+          <div class="mt-4 p-2 border-t border-gray-300 pt-4">
+            <form
+              @submit.prevent="createSubcategory"
+              class="flex flex-col gap-2"
+            >
+              <select
+                v-model="newSubcategory.category"
+                class="bg-[#7E7D7D] text-white px-3 py-2 rounded-full"
+              >
+                <option
+                  disabled
+                  value=""
+                >
+                  Выберите категорию
+                </option>
+                <option
+                  v-for="cat in categoryOptions"
+                  :key="cat.value"
+                  :value="cat.value"
+                >
+                  {{ cat.label }}
+                </option>
+              </select>
+
+              <input
+                v-model="newSubcategory.name"
+                placeholder="Название подкатегории"
+                class="bg-[#7E7D7D] text-white px-3 py-2 rounded-full"
+              />
+
+              <button
+                type="submit"
+                class="bg-primary text-white px-4 py-2 rounded-full hover:bg-green-600 transition self-start"
+              >
+                ➕ Создать подкатегорию
+              </button>
+            </form>
+          </div>
         </div>
 
         <div class="flex flex-col gap-4">
@@ -137,42 +175,33 @@ await init();
 
 const showModal = ref(false);
 
-const form = ref({
+const newSubcategory = ref({
   name: "",
-  quality: "",
-  mark: "",
-  model: "",
-  count: 1,
-  category: "",
-  subcategory: "",
-  vincode: "",
-  state: "",
-  price: "",
-  unit: "",
-  images: [],
+  category: route.params.category_id || "",
 });
 
-const handleFileUpload = (e) => {
-  form.value.images = Array.from(e.target.files);
-};
+const categoryOptions = ref([]);
+onMounted(async () => {
+  const { data } = await $axios.get("/categoryes");
+  categoryOptions.value = data.map((c) => ({ label: c.name, value: c.id }));
+});
 
-const submitProduct = async () => {
-  const fd = new FormData();
-  for (const [key, val] of Object.entries(form.value)) {
-    if (key === "images") {
-      val.forEach((file) => fd.append("images", file));
-    } else {
-      fd.append(key, val);
-    }
-  }
-
+const createSubcategory = async () => {
+  if (!newSubcategory.value.name || !newSubcategory.value.category)
+    return alert("Заполните все поля");
+  const token = localStorage.getItem("token");
   try {
-    await $axios.post("/products", fd);
-    alert("Успешно добавлено");
-    showModal.value = false;
-    await fetchProducts();
+    await $axios.post("/subcategoryes", {
+      name: newSubcategory.value.name,
+      categoryId: newSubcategory.value.category,
+      access_token: token,
+    });
+    alert("Подкатегория создана");
+
+    newSubcategory.value.name = "";
+    await init();
   } catch (e) {
-    alert("Ошибка при добавлении");
+    alert("Ошибка при создании");
   }
 };
 </script>
