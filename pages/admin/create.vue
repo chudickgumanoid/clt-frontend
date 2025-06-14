@@ -25,14 +25,18 @@
         >
           Выбрать файлы
         </button>
-        <ul class="mt-4 text-sm text-gray-600">
-          <li
-            v-for="(file, i) in form.images"
-            :key="i"
+        <div class="mt-4 grid grid-cols-3 gap-4">
+          <div
+            v-for="(img, idx) in imagePreviews"
+            :key="idx"
+            class="w-full h-32 bg-gray-100 flex items-center justify-center overflow-hidden rounded-lg border"
           >
-            {{ file.name }}
-          </li>
-        </ul>
+            <img
+              :src="img.url"
+              class="object-cover w-full h-full"
+            />
+          </div>
+        </div>
       </div>
 
       <!-- Поля формы справа -->
@@ -49,37 +53,6 @@
           <input
             v-model="form.partNumber"
             placeholder="Номер партнера"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model="form.state"
-            placeholder="Состояние"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model="form.mark"
-            placeholder="Марка авто"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model="form.unit"
-            placeholder="Единица измерения"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model="form.model"
-            placeholder="Модель"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model.number="form.count"
-            type="number"
-            placeholder="Количество"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
-          <input
-            v-model="form.generation"
-            placeholder="Поколение"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
           />
           <select
@@ -100,11 +73,7 @@
               {{ cat.label }}
             </option>
           </select>
-          <input
-            v-model="form.vincode"
-            placeholder="Винкод"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          />
+
           <select
             v-model="form.subcategory"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
@@ -123,11 +92,129 @@
               {{ sub.label }}
             </option>
           </select>
+
+          <select
+            v-model="form.state"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Состояние
+            </option>
+            <option
+              v-for="s in states"
+              :key="s.id"
+              :value="s.value"
+            >
+              {{ s.value }}
+            </option>
+          </select>
+
+          <select
+            v-model="form.unit"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Ед. изм.
+            </option>
+            <option>Шт.</option>
+            <option>Литры</option>
+            <option>Кг</option>
+          </select>
+
+          <select
+            v-model="form.mark"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Марка авто
+            </option>
+            <option
+              v-for="mark in carMarks"
+              :key="mark.id"
+              :value="mark.value"
+            >
+              {{ mark.value }}
+            </option>
+          </select>
+
+          <select
+            v-model="form.model"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Модель
+            </option>
+            <option
+              v-for="model in carModels[form.mark] || []"
+              :key="model.id"
+              :value="model.value"
+            >
+              {{ model.value }}
+            </option>
+          </select>
+
           <input
-            v-model="form.quality"
-            placeholder="Качество"
+            v-model.number="form.count"
+            type="number"
+            placeholder="Количество"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
           />
+
+          <select
+            v-model="form.generation"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Поколение
+            </option>
+            <option
+              v-for="gen in generations"
+              :key="gen.id"
+              :value="gen.value"
+            >
+              {{ gen.value }}
+            </option>
+          </select>
+
+          <input
+            v-model="form.vincode"
+            placeholder="Винкод"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          />
+
+          <select
+            v-model="form.quality"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          >
+            <option
+              disabled
+              value=""
+            >
+              Качество
+            </option>
+            <option
+              v-for="q in qualities"
+              :key="q.id"
+              :value="q.value"
+            >
+              {{ q.value }}
+            </option>
+          </select>
         </div>
 
         <div class="mt-4 flex items-center justify-between">
@@ -144,7 +231,7 @@
 
         <button
           type="submit"
-          class="bg-primary text-white px-6 py-2 mt-4 rounded-full hover:bg-green-600 transition self-end"
+          class="bg-white text-primary px-6 py-2 mt-4 rounded-lg text-2xl hover:bg-green-600 transition self-end"
         >
           Добавить
         </button>
@@ -206,13 +293,22 @@ watch(
   }
 );
 
+const imagePreviews = ref([]);
+
+const updateImagePreviews = (files) => {
+  form.value.images = files;
+  imagePreviews.value = files.map((file) => ({
+    file,
+    url: URL.createObjectURL(file),
+  }));
+};
+
 const handleFileUpload = (e) => {
-  form.value.images = Array.from(e.target.files);
+  updateImagePreviews(Array.from(e.target.files));
 };
 
 const handleDrop = (e) => {
-  const files = Array.from(e.dataTransfer.files);
-  form.value.images = files;
+  updateImagePreviews(Array.from(e.dataTransfer.files));
 };
 
 const submitProduct = async () => {
@@ -238,6 +334,40 @@ const submitProduct = async () => {
     alert("Ошибка при добавлении");
   }
 };
+
+const carMarks = ref([]);
+const carModels = ref({});
+const generations = ref([]);
+const qualities = ref([]);
+const states = ref([]);
+
+onMounted(async () => {
+  try {
+    const { data: filters } = await $axios.get("/filters");
+    console.log(filters, "filters");
+    for (const filter of filters) {
+      switch (filter.filter) {
+        case "Марка авто":
+          carMarks.value = filter.options;
+          break;
+        case "Модель":
+          carModels.value = filter.options[0]; // внутри один объект с ключами-брендами
+          break;
+        case "Поколение":
+          generations.value = filter.options;
+          break;
+        case "Качество":
+          qualities.value = filter.options;
+          break;
+        case "Состояние":
+          states.value = filter.options;
+          break;
+      }
+    }
+  } catch (err) {
+    console.error("Ошибка при загрузке фильтров:", err);
+  }
+});
 </script>
 
 <style scoped></style>
