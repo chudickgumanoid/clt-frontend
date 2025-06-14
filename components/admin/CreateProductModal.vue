@@ -131,7 +131,6 @@ const submitProduct = async () => {
 
   try {
     await $axios.post("/products", fd);
-    alert("Успешно добавлено");
     emit("update:modelValue", false);
     emit("success");
   } catch {

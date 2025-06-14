@@ -27,62 +27,66 @@
         </div>
       </div>
 
-      <!-- Category grid -->
       <div class="grid grid-cols-[auto_2fr] gap-10">
         <div
-          class="sticky top-[100px] self-start h-fit flex flex-col gap-2 max-h-[383px] overflow-auto pr-20"
+          class="sticky top-[100px] w-full self-start h-fit flex flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
         >
-          <template v-if="categoryesData.length">
-            <nuxt-link
-              v-for="category in categoryesData"
-              :key="category.id"
-              :to="`/catalog?category=${category.id}`"
-            >
-              <CategoryTag :label="category.name" />
-            </nuxt-link>
-          </template>
-          <div v-else>Список пуст</div>
-          <div class="mt-4 p-2 border-t border-gray-300 pt-4">
-            <form
-              class="flex flex-col gap-2"
-              @submit.prevent="createSubcategory"
-            >
-              <select
-                v-model="newSubcategory.category"
-                class="bg-[#7E7D7D] text-white px-3 py-2 rounded-full"
-              >
-                <option
-                  disabled
-                  value=""
-                >
-                  Выберите категорию
-                </option>
-                <option
-                  v-for="cat in categoryOptions"
-                  :key="cat.value"
-                  :value="cat.value"
-                >
-                  {{ cat.label }}
-                </option>
-              </select>
-
-              <input
-                v-model="newSubcategory.name"
-                placeholder="Название подкатегории"
-                class="bg-[#7E7D7D] text-white px-3 py-2 rounded-full"
+          <template
+            v-for="category in categoryesData"
+            :key="category.id"
+          >
+            <div>
+              <CategoryTag
+                :label="category.name"
+                class="cursor-pointer"
+                @click="loadSubcategories(category.id)"
               />
 
-              <button
-                type="submit"
-                class="bg-primary text-white px-4 py-2 rounded-full hover:bg-green-600 transition self-start"
-              >
-                ➕ Создать подкатегорию
-              </button>
-            </form>
-          </div>
+              <!-- Подкатегории для выбранной категории -->
+              <template v-if="selectedCategoryId === category.id">
+                <div class="ml-4 mt-2 space-y-2">
+                  <div class="bg-[#5D5D5D] rounded-2xl py-4 w-[116%]">
+                    <button
+                      class="text-white text-sm px-1 py-1 rounded w-full"
+                      @click="newSubcategoryVisible = !newSubcategoryVisible"
+                    >
+                      Добавить подкатегорию +
+                    </button>
+                    <div
+                      v-if="newSubcategoryVisible"
+                      class="mt-2 flex flex-col gap-10"
+                    >
+                      <input
+                        v-model="newSubcategory.name"
+                        placeholder="Название"
+                        class="px-4 py-2 rounded-2xl w-[143px] bg-[#9B9B9B] text-white mx-2 mt-4"
+                      />
+                      <button
+                        class="bg-black w-fit mx-auto text-yellow-400 px-4 rounded-2xl"
+                        @click="createSubcategory"
+                      >
+                        Создать
+                      </button>
+                    </div>
+                  </div>
+
+                  <div
+                    v-for="subcategory in subcategoryes"
+                    :key="subcategory.id"
+                  >
+                    <CategoryTag
+                      :label="subcategory.name"
+                      class="cursor-pointer"
+                      @click="navigateToCategoryAndSub(subcategory.id)"
+                    />
+                  </div>
+                </div>
+              </template>
+            </div>
+          </template>
         </div>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 bg-[#888888] rounded-3xl">
           <ProductRow
             v-for="item in dataProducts"
             :key="item.id"
@@ -100,10 +104,11 @@
 </template>
 
 <script setup>
+import { ref, watch } from "vue";
 import CreateProductModal from "~/components/admin/CreateProductModal.vue";
 import ProductRow from "~/components/admin/ProductRow.vue";
 import FilterBar from "~/components/category/FilterBar.vue";
-import { useProducts } from "~/shared/utils/useProducts";
+import { useProductsRef } from "~/shared/utils/useProducts";
 definePageMeta({
   middleware: "admin-auth-client",
 });
@@ -114,79 +119,75 @@ const route = useRoute();
 const { $axios } = useNuxtApp();
 
 const selectedFilters = ref({});
-const dataProducts = ref([]);
-const filters = ref([]);
-const subcategoryes = ref([]);
 
-const { data: categoryesData } = await $axios.get("/categoryes");
-
-const buildQueryParams = () => {
-  const base = {
-    categoryId: route.params.category_id,
-    subcategoryId: route.query.subcategory,
-  };
-
-  const filterParams = {};
-  for (const [key, value] of Object.entries(selectedFilters.value)) {
-    if (Array.isArray(value)) {
-      filterParams[key] = value.join(",");
-    } else {
-      filterParams[key] = value;
-    }
-  }
-
-  return { ...base, ...filterParams };
-};
-
-const fetchProducts = async () => {
-  const { data } = await $axios.get("/products", {
-    params: buildQueryParams(),
-  });
-
-  const { dataProducts: normalized } = useProducts(data);
-  dataProducts.value = normalized.value;
-};
-
-watch(selectedFilters, fetchProducts, { deep: true, immediate: true });
-
-watch(
-  () => route.query.subcategory,
-  () => {
-    fetchProducts();
-  },
-  { deep: true, immediate: true }
+// SSR: фильтры и категории
+const { data: filters } = await useAsyncData("filters", () =>
+  $axios.get("/filters").then((r) => r.data)
 );
 
-const init = async () => {
-  const { data } = await $axios.get("/filters");
-  filters.value = data;
+const { data: categoryesData } = await useAsyncData("categoryes", () =>
+  $axios.get("/categoryes").then((r) => r.data)
+);
 
-  const subRes = await $axios.get("/subcategoryes", {
-    params: { category: route.params.category_id },
+// SSR: подкатегории по текущей категории
+const { data: subcategoryes } = await useAsyncData(
+  "subcategoryes",
+  () => {
+    if (!route.query.category) return [];
+    return $axios
+      .get("/subcategoryes", { params: { categoryId: route.query.category } })
+      .then((r) => r.data);
+  },
+  {
+    watch: [() => route.query.category],
+  }
+);
+
+// 🧠 Продукты — отдельный ref, чтобы computed был реактивным
+const rawProducts = ref([]);
+
+// 👉 Запрос продуктов (и при фильтрах, и при смене query)
+const fetchProducts = async () => {
+  const { data } = await $axios.get("/products", {
+    params: {
+      categoryId: route.query.category,
+      subcategoryId: route.query.subcategory,
+      ...Object.fromEntries(
+        Object.entries(selectedFilters.value).map(([k, v]) => [
+          k,
+          Array.isArray(v) ? v.join(",") : v,
+        ])
+      ),
+    },
   });
-  subcategoryes.value = subRes.data;
 
-  await fetchProducts();
+  rawProducts.value = data;
 };
 
-await init();
+await fetchProducts();
 
-const showModal = ref(false);
+// 🔁 Обновляем при смене фильтров
+watch(selectedFilters, fetchProducts, { deep: true });
+// 🔁 Обновляем при смене query
+watch(() => [route.query.category, route.query.subcategory], fetchProducts);
 
-const newSubcategory = ref({
-  name: "",
-  category: route.params.category_id || "",
-});
+// ✅ computed с нормализацией
+const { dataProducts } = useProductsRef(rawProducts);
 
-const categoryOptions = ref([]);
-onMounted(async () => {
-  const { data } = await $axios.get("/categoryes");
-  categoryOptions.value = data.map((c) => ({ label: c.name, value: c.id }));
-});
+const newSubcategoryVisible = ref(false);
+const newSubcategory = ref({ name: "", category: route.query.category });
+
+watch(
+  () => route.query.category,
+  (newVal) => {
+    newSubcategory.value.category = newVal;
+  }
+);
 
 const createSubcategory = async () => {
-  if (!newSubcategory.value.name || !newSubcategory.value.category)
+  if (!newSubcategory.value.name || !newSubcategory.value.category) {
     return alert("Заполните все поля");
+  }
   const token = localStorage.getItem("token");
   try {
     await $axios.post("/subcategoryes", {
@@ -194,13 +195,33 @@ const createSubcategory = async () => {
       categoryId: newSubcategory.value.category,
       access_token: token,
     });
-    alert("Подкатегория создана");
 
     newSubcategory.value.name = "";
-    await init();
+    await fetchProducts(); // перезагрузи продукты
   } catch (e) {
     alert("Ошибка при создании");
   }
+};
+
+const selectedCategoryId = ref(null);
+
+const loadSubcategories = async (categoryId) => {
+  selectedCategoryId.value = categoryId;
+  const { data } = await $axios.get("/subcategoryes", {
+    params: { categoryId },
+  });
+  subcategoryes.value = data;
+};
+
+const router = useRouter();
+const navigateToCategoryAndSub = (subcategoryId) => {
+  router.push({
+    path: "/admin",
+    query: {
+      category: selectedCategoryId.value,
+      subcategory: subcategoryId,
+    },
+  });
 };
 </script>
 

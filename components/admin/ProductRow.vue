@@ -92,7 +92,6 @@ const changeCount = async (action) => {
 const removeProduct = async () => {
   try {
     await $axios.delete(`/products?productId=${props.product.id}`);
-    alert("Успешно удалено");
   } catch (e) {
     alert("Ошибка при удалении");
   }

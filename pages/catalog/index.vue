@@ -133,7 +133,7 @@ const fetchProducts = async () => {
       ),
     },
   });
-  console.log(data, "data");
+
   rawProducts.value = data;
 };
 
