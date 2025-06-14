@@ -1,10 +1,11 @@
 import axios from "axios";
+import { BASE_API_URL } from "@/shared/utils/constants";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const instance = axios.create({
-    baseURL: "https://98da63106715be00063abd3281040a13.serveo.net/api",
+    baseURL: BASE_API_URL,
   });
 
   instance.interceptors.request.use((request) => {

@@ -25,6 +25,9 @@
 
 <script setup>
 import Chart from "~/components/admin/Chart.vue";
+definePageMeta({
+  middleware: "admin-auth-client",
+});
 
 const chartData = ref();
 

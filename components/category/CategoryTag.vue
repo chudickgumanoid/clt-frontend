@@ -1,6 +1,6 @@
 <template>
   <button
-    class="rounded-4xl bg-gray-secondary py-4 px-8 text-xl font-medium hover:bg-primary transition-all flex items-center justify-center max-sm:text-sm"
+    class="rounded-4xl bg-gray-secondary py-4 px-8 text-xl font-medium hover:bg-primary transition-all flex items-center justify-center max-sm:text-sm w-[180px] leading-4 h-full"
   >
     <span class="first-letter:uppercase">{{ label }}</span>
   </button>

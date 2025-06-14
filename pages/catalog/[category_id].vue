@@ -1,9 +1,10 @@
 <template>
   <div class="container">
     <div class="flex flex-col gap-15 max-sm:gap-8">
-      <!-- Наверху: Назад + фильтры + корзина -->
       <div class="sticky top-0 z-10 py-4 max-sm:static">
-        <div class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4">
+        <div
+          class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4"
+        >
           <nuxt-link
             to="/"
             class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2"
@@ -17,16 +18,19 @@
               :filters="filters"
             />
 
-            <nuxt-link to="/cart" class="self-end max-sm:self-start">
+            <nuxt-link
+              to="/cart"
+              class="self-end max-sm:self-start"
+            >
               <LazyCartButton />
             </nuxt-link>
           </div>
         </div>
       </div>
 
-      <!-- Основная часть: фильтры + товары -->
-      <div class="grid grid-cols-[auto_2fr] gap-10 max-sm:grid-cols-1 max-sm:gap-6">
-        <!-- Сайдбар -->
+      <div
+        class="grid grid-cols-[auto_2fr] gap-8 max-sm:grid-cols-1 max-sm:gap-6"
+      >
         <div
           class="sticky top-[100px] self-start h-fit flex flex-col gap-2 max-h-[383px] overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
         >
@@ -45,7 +49,6 @@
           <div v-else>Список пуст</div>
         </div>
 
-        <!-- Товары -->
         <div class="grid grid-cols-3 gap-14 gap-y-8 max-sm:grid-cols-1">
           <template v-if="dataProducts.length">
             <ProductCard
@@ -60,7 +63,6 @@
     </div>
   </div>
 </template>
-
 
 <script setup>
 import FilterBar from "~/components/category/FilterBar.vue";

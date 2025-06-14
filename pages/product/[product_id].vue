@@ -30,7 +30,7 @@
             <img
               v-for="img in product.images"
               :key="img"
-              :src="`https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${img}`"
+              :src="`${BASE_API_URL}/image?imageId=${img}`"
               class="w-20 h-20 rounded-xl object-cover border-2 border-transparent hover:border-white cursor-pointer"
               :class="{ 'border-white': img === activeImage }"
               @click="activeImage = img"
@@ -84,8 +84,8 @@ import { ref } from "vue";
 import ProductCard from "~/components/products/ProductCard.vue";
 import ApiImg from "~/components/UI/ApiImg.vue";
 import { tengeFormat } from "~/shared/utils/currencyFormat";
-
-
+import { BASE_API_URL } from "~/shared/utils/constants";
+import { useProducts } from "~/shared/utils/useProducts";
 
 const route = useRoute();
 const { $axios } = useNuxtApp();
@@ -99,11 +99,13 @@ const { data } = await $axios.get("/products", {
   params: { productId: route.params.product_id },
 });
 
-const mainProduct = data?.[0];
+const { dataProducts } = useProducts(data);
+
+const mainProduct = dataProducts.value?.[0];
 product.value = mainProduct;
 activeImage.value = mainProduct?.images?.[0] || "";
 
-useHead({ title: `Страница товара ${product.value?.name}` });
+useHead({ title: `Товар - ${product.value?.name}` });
 if (mainProduct?.category) {
   const related = await $axios.get("/products", {
     params: { category: mainProduct.category },
@@ -124,7 +126,7 @@ const addToCart = () => {
     cart.value.push({
       ...product.value,
       quantity: 1,
-      image: `https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${product.value.image}`,
+      image: `${BASE_API_URL}/image?imageId=${product.value.image}`,
     });
   }
 };

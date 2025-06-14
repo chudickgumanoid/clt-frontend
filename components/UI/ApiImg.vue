@@ -1,11 +1,12 @@
 <template>
   <img
-    :src="`https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${imageId}`"
+    :src="`${BASE_API_URL}/image?imageId=${imageId}`"
     alt=""
   />
 </template>
 
 <script setup>
+import { BASE_API_URL } from "~/shared/utils/constants";
 defineProps({
   imageId: String,
 });

@@ -18,7 +18,7 @@
           multiple
           class="hidden"
           @change="handleFileUpload"
-        >
+        />
         <button
           class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
           @click="$refs.fileInput.click()"
@@ -45,38 +45,43 @@
             v-model="form.name"
             placeholder="Название"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
+          <input
+            v-model="form.partNumber"
+            placeholder="Номер партнера"
+            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+          />
           <input
             v-model="form.state"
             placeholder="Состояние"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <input
             v-model="form.mark"
             placeholder="Марка авто"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <input
             v-model="form.unit"
             placeholder="Единица измерения"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <input
             v-model="form.model"
             placeholder="Модель"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <input
             v-model.number="form.count"
             type="number"
             placeholder="Количество"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <input
             v-model="form.generation"
             placeholder="Поколение"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <select
             v-model="form.category"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
@@ -99,7 +104,7 @@
             v-model="form.vincode"
             placeholder="Винкод"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
           <select
             v-model="form.subcategory"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
@@ -122,7 +127,7 @@
             v-model="form.quality"
             placeholder="Качество"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
         </div>
 
         <div class="mt-4 flex items-center justify-between">
@@ -134,7 +139,7 @@
             type="number"
             placeholder="Цена"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
+          />
         </div>
 
         <button
@@ -149,6 +154,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: "admin-auth-client",
+});
+
 const { $axios } = useNuxtApp();
 
 const form = ref({
@@ -166,6 +175,7 @@ const form = ref({
   unit: "",
   generation: "",
   images: [],
+  partNumber: "",
 });
 
 const categoryOptions = ref([]);

@@ -3,7 +3,7 @@
     class="bg-[#5D5D5D] rounded-[20px] p-4 text-white flex flex-col max-sm:flex-row items-center w-full max-w-[258px] max-sm:max-w-full gap-2 max-sm:gap-4"
   >
     <ApiImg
-      :image-id="props.product.image"
+      :image-id="props.product.images[0]"
       alt="Product"
       class="object-contain w-full max-sm:max-w-[150px]"
     />
@@ -42,6 +42,7 @@ import { useLocalStorage } from "@vueuse/core";
 import { tengeFormat } from "~/shared/utils/currencyFormat";
 import ApiImg from "../UI/ApiImg.vue";
 import MButton from "../UI/MButton.vue";
+import { BASE_API_URL } from "~/shared/utils/constants";
 
 const props = defineProps({
   product: Object,
@@ -59,7 +60,7 @@ const addToCart = () => {
     cart.value.push({
       ...props.product,
       quantity: 1,
-      image: `https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${props.product.image}`,
+      image: `${BASE_API_URL}/image?imageId=${props.product.image}`,
     });
   }
 };

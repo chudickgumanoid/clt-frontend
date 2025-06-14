@@ -18,6 +18,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: "admin-auth",
+});
+
 import { ref } from "vue";
 import Chart from "~/components/admin/Chart.vue";
 

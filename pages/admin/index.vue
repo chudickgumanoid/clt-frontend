@@ -51,8 +51,8 @@
           <div v-else>Список пуст</div>
           <div class="mt-4 p-2 border-t border-gray-300 pt-4">
             <form
-              @submit.prevent="createSubcategory"
               class="flex flex-col gap-2"
+              @submit.prevent="createSubcategory"
             >
               <select
                 v-model="newSubcategory.category"
@@ -111,6 +111,9 @@ import CreateProductModal from "~/components/admin/CreateProductModal.vue";
 import ProductRow from "~/components/admin/ProductRow.vue";
 import FilterBar from "~/components/category/FilterBar.vue";
 import { useProducts } from "~/shared/utils/useProducts";
+definePageMeta({
+  middleware: "admin-auth-client",
+});
 
 useHead({ title: "Admin" });
 
