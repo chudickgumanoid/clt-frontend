@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex max-sm:flex-col max-sm:items-center items-start justify-between gap-4 p-4 rounded-[20px] bg-[#7E7D7D] text-white w-full max-w-[600px]"
+    class="flex max-sm:flex-col max-sm:items-center items-start justify-between gap-4 p-4 rounded-[20px] bg-[#7E7D7D] text-white w-full max-sm:max-w-[600px]"
   >
     <!-- Изображение -->
     <div class="w-[218px] h-[218px] max-sm:w-[140px] max-sm:h-[140px] shrink-0">
@@ -47,7 +47,6 @@
 
     <!-- Кнопка удаления -->
     <button
-      v-if="!props.isNotEdit"
       class="text-xl px-2 absolute top-2 right-2 max-sm:static max-sm:self-end"
       @click="$emit('remove')"
     >

@@ -23,6 +23,7 @@
               :product="item"
               @update-quantity="handleQuantityChange"
               @remove="removeItem(item.id)"
+              :isNotEdit='false'
             />
           </div>
         </div>

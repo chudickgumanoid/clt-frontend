@@ -17,12 +17,12 @@
               :filters="filters"
             />
 
-            <button
+            <nuxt-link
               class="bg-primary text-white px-6 py-2 rounded-full hover:bg-green-600 transition"
-              @click="showModal = true"
+              to="/admin/create"
             >
               Добавить запчасть
-            </button>
+            </nuxt-link>
 
             <nuxt-link
               to="/admin/dashboard"

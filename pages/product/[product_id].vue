@@ -30,7 +30,7 @@
             <img
               v-for="img in product.images"
               :key="img"
-              :src="`${config.public.apiBaseUrl}/image?imageId=${img}`"
+              :src="`https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${img}`"
               class="w-20 h-20 rounded-xl object-cover border-2 border-transparent hover:border-white cursor-pointer"
               :class="{ 'border-white': img === activeImage }"
               @click="activeImage = img"
@@ -106,7 +106,7 @@ activeImage.value = mainProduct?.images?.[0] || "";
 useHead({ title: `Страница товара ${product.value?.name}` });
 if (mainProduct?.category) {
   const related = await $axios.get("/products", {
-    params: { категория: mainProduct.category },
+    params: { category: mainProduct.category },
   });
 
   relatedProducts.value = related.data.filter((p) => p.id !== mainProduct.id);
@@ -124,7 +124,7 @@ const addToCart = () => {
     cart.value.push({
       ...product.value,
       quantity: 1,
-      image: `${config.public.apiBaseUrl}/image?imageId=${product.value.image}`,
+      image: `https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${product.value.image}`,
     });
   }
 };

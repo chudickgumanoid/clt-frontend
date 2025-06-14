@@ -59,7 +59,7 @@ const addToCart = () => {
     cart.value.push({
       ...props.product,
       quantity: 1,
-      image: `${config.public.apiBaseUrl}/image?imageId=${props.product.image}`,
+      image: `https://98da63106715be00063abd3281040a13.serveo.net/api/image?imageId=${props.product.image}`,
     });
   }
 };

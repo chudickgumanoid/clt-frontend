@@ -56,7 +56,12 @@
       </button>
     </div>
 
-    <button class="text-xl ml-4">×</button>
+    <button
+      @click="removeProduct"
+      class="text-xl ml-4"
+    >
+      ×
+    </button>
   </div>
 </template>
 
@@ -81,6 +86,15 @@ const changeCount = async (action) => {
     else if (action === "remove" && count.value > 0) count.value--;
   } catch (e) {
     alert("Ошибка при обновлении количества");
+  }
+};
+
+const removeProduct = async () => {
+  try {
+    await $axios.delete(`/products?productId=${props.product.id}`);
+    alert("Успешно удалено");
+  } catch (e) {
+    alert("Ошибка при удалении");
   }
 };
 </script>
