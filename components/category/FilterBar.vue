@@ -19,7 +19,7 @@
       </button>
 
       <div
-        v-if="open === filter.filter"
+        v-show="open === filter.filter"
         :ref="(el) => setDropdownRef(filter.filter, el)"
         class="absolute mt-2 bg-[#7E7D7D] text-white rounded-xl shadow-lg px-4 z-50 min-w-[200px] max-h-[300px] overflow-auto"
       >
@@ -75,16 +75,22 @@ const setFilterRef = (key, el) => {
   if (el) filterRefs.value[key] = el;
 };
 
+const clickOutsideCleanups = ref({});
+const initializedRefs = ref({});
 const setDropdownRef = (key, el) => {
-  if (el) {
-    dropdownRefs.value[key] = el;
-    onClickOutside(el, () => {
-      if (open.value === key) {
-        open.value = null;
-        search.value = "";
-      }
-    });
-  }
+  if (!el || initializedRefs.value[key]) return;
+
+  dropdownRefs.value[key] = el;
+
+  const cleanup = onClickOutside(el, () => {
+    if (open.value === key) {
+      open.value = null;
+      search.value = "";
+    }
+  });
+
+  clickOutsideCleanups.value[key] = cleanup;
+  initializedRefs.value[key] = true;
 };
 
 const toggleOpen = (key) => {
@@ -168,6 +174,12 @@ const filteredOptions = (filter) => {
 
   return filter.options;
 };
+
+onUnmounted(() => {
+  for (const cleanup of Object.values(clickOutsideCleanups.value)) {
+    cleanup?.();
+  }
+});
 </script>
 
 <style scoped></style>
