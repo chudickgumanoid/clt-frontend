@@ -11,60 +11,91 @@
       </div>
 
       <div class="chart-container">
-        <Chart :chart-data="chartData" />
+        <canvas
+          ref="canvasRef"
+          width="1320"
+          height="500"
+        />
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
+import {
+  BarElement,
+  CategoryScale,
+  Chart,
+  Legend,
+  LinearScale,
+  Tooltip,
+} from "chart.js";
+import { onMounted, ref } from "vue";
+
 definePageMeta({
-  middleware: "admin-auth",
+  middleware: "admin-auth-client",
 });
 
-import { ref } from "vue";
-import Chart from "~/components/admin/Chart.vue";
+// Регистрируем компоненты Chart.js
+Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const chartData = ref();
-
+const canvasRef = ref(null);
+const chartInstance = ref(null);
 const { $axios } = useNuxtApp();
-const response = await $axios.get("/search");
-const items = Array.isArray(response.data) ? response.data : [];
 
-if (items.length === 0) {
-  chartData.value = {
-    labels: ["Нет данных"],
-    datasets: [
-      {
-        label: "Топ запросов",
-        data: [0],
-        backgroundColor: "#ccc",
-        borderColor: "#ccc",
-      },
-    ],
-  };
-} else {
-  const labels = items.map((item) => item.text);
-  const counts = items.map((item) => item.count);
+onMounted(async () => {
+  const { data } = await $axios.get("/search");
+  const items = Array.isArray(data.result) ? data.result : [];
 
-  chartData.value = {
-    labels,
-    datasets: [
-      {
-        label: "Топ запросов",
-        data: counts,
-        backgroundColor: "#8B0000",
-        borderColor: "#8B0000",
-        borderWidth: 1,
+  const labels = items.length ? items.map((i) => i.text) : ["Нет данных"];
+  const dataValues = items.length ? items.map((i) => i.count) : [0];
+
+  if (canvasRef.value) {
+    // Если график уже есть — уничтожаем его
+    if (chartInstance.value) {
+      chartInstance.value.destroy();
+    }
+
+    const ctx = canvasRef.value.getContext("2d");
+
+    chartInstance.value = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Топ запросов",
+            data: dataValues,
+            backgroundColor: "#8B0000",
+            borderColor: "#8B0000",
+            borderWidth: 1,
+          },
+        ],
       },
-    ],
-  };
-}
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
+});
 </script>
 
 <style scoped>
 .chart-container {
-  width: 100%;
+  min-width: 1000px;
+  max-width: 100%;
   height: 500px;
+  overflow-x: auto;
+  position: relative;
+}
+canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 </style>
