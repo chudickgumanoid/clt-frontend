@@ -8,7 +8,7 @@
       class="object-contain w-full max-sm:max-w-[150px]"
     />
 
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 w-full">
       <div class="flex flex-col gap-3">
         <div class="text-lg">{{ props.product.name }}</div>
         <div class="text-sm">{{ props.product.description }}</div>

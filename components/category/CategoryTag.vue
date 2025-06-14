@@ -1,6 +1,6 @@
 <template>
   <button
-    class="rounded-4xl bg-gray-secondary py-4 px-8 text-xl font-medium hover:bg-primary transition-all flex items-center justify-center max-sm:text-sm w-[180px] leading-4 h-full"
+    class="rounded-4xl bg-gray-secondary py-4 px-8 text-xl font-medium hover:text-primary transition-all flex items-center justify-center max-sm:text-sm w-[180px] leading-4 h-full tag"
   >
     <span class="first-letter:uppercase">{{ label }}</span>
   </button>
@@ -11,3 +11,9 @@ defineProps({
   label: String,
 });
 </script>
+
+<style scoped>
+.tag:hover {
+  box-shadow: 0px 4px 4px 4px #00000040 inset;
+}
+</style>

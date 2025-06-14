@@ -26,7 +26,7 @@
         v-for="category in categoryesData"
         :key="category"
       >
-        <nuxt-link :to="`/catalog/${category.id}`">
+        <nuxt-link :to="`/catalog`">
           <CategoryTag
             class="!cursor-pointer"
             :label="category.name"

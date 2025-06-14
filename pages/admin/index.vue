@@ -4,13 +4,6 @@
       <!-- Top bar -->
       <div class="sticky top-0 z-10 py-4">
         <div class="flex justify-between items-center">
-          <nuxt-link
-            to="/"
-            class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all"
-          >
-            Назад
-          </nuxt-link>
-
           <div class="flex items-center gap-4">
             <FilterBar
               v-model="selectedFilters"
@@ -18,7 +11,7 @@
             />
 
             <nuxt-link
-              class="bg-primary text-white px-6 py-2 rounded-full hover:bg-green-600 transition"
+              class="bg-gray-secondary text-white px-6 py-2 rounded-full"
               to="/admin/create"
             >
               Добавить запчасть
@@ -26,7 +19,7 @@
 
             <nuxt-link
               to="/admin/dashboard"
-              class="bg-gray-700 text-white px-6 py-2 rounded-full hover:bg-gray-600 transition"
+              class="bg-gray-secondary text-white px-6 py-2 rounded-full hover:bg-gray-600 transition"
             >
               Дашборд
             </nuxt-link>
@@ -39,13 +32,13 @@
         <div
           class="sticky top-[100px] self-start h-fit flex flex-col gap-2 max-h-[383px] overflow-auto pr-20"
         >
-          <template v-if="subcategoryes.length">
+          <template v-if="categoryesData.length">
             <nuxt-link
-              v-for="subcategory in subcategoryes"
-              :key="subcategory.id"
-              :to="`/catalog/${route.params.category_id}?subcategory=${subcategory.id}`"
+              v-for="category in categoryesData"
+              :key="category.id"
+              :to="`/catalog?category=${category.id}`"
             >
-              <CategoryTag :label="subcategory.name" />
+              <CategoryTag :label="category.name" />
             </nuxt-link>
           </template>
           <div v-else>Список пуст</div>
@@ -124,6 +117,8 @@ const selectedFilters = ref({});
 const dataProducts = ref([]);
 const filters = ref([]);
 const subcategoryes = ref([]);
+
+const { data: categoryesData } = await $axios.get("/categoryes");
 
 const buildQueryParams = () => {
   const base = {
