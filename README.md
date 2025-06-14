@@ -2,6 +2,12 @@
 
 Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
+## Поднять в докере
+```bash
+docker compose up
+```
+
+
 ## Setup
 
 Make sure to install dependencies:
