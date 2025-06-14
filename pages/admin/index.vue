@@ -73,12 +73,20 @@
                   <div
                     v-for="subcategory in subcategoryes"
                     :key="subcategory.id"
+                    class="flex items-center gap-2"
                   >
                     <CategoryTag
                       :label="subcategory.name"
                       class="cursor-pointer"
                       @click="navigateToCategoryAndSub(subcategory.id)"
                     />
+                    <button
+                      class="text-white cursor-pointer bg-gray-secondary flex items-center justify-center min-h-8 min-w-8 h-8 w-8 rounded font-bold text-lg"
+                      title="Удалить подкатегорию"
+                      @click="deleteSubcategory(subcategory.id)"
+                    >
+                      ✕
+                    </button>
                   </div>
                 </div>
               </template>
@@ -108,8 +116,8 @@ import { ref, watch } from "vue";
 import CreateProductModal from "~/components/admin/CreateProductModal.vue";
 import ProductRow from "~/components/admin/ProductRow.vue";
 import FilterBar from "~/components/category/FilterBar.vue";
-import { useProductsRef } from "~/shared/utils/useProducts";
 import { useNotification } from "~/shared/utils/useNotification";
+import { useProductsRef } from "~/shared/utils/useProducts";
 
 const { notify } = useNotification();
 
@@ -229,6 +237,30 @@ const navigateToCategoryAndSub = (subcategoryId) => {
       subcategory: subcategoryId,
     },
   });
+};
+
+const deleteSubcategory = async (subcategoryId) => {
+  const token = localStorage.getItem("token");
+  try {
+    await $axios.delete(
+      `/subcategoryes?subcategoryId=${subcategoryId}&access_token=${token}`
+    );
+    notify({
+      message: "Подкатегория удалена",
+      type: "success",
+      duration: 3000,
+    });
+    // Обновить список подкатегорий
+    if (selectedCategoryId.value) {
+      await loadSubcategories(selectedCategoryId.value);
+    }
+  } catch (e) {
+    notify({
+      message: `Ошибка при удалении: ${e.message}`,
+      type: "error",
+      duration: 5000,
+    });
+  }
 };
 </script>
 
