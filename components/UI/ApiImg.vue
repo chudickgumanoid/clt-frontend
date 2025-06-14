@@ -13,4 +13,4 @@ defineProps({
 const config = useRuntimeConfig();
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

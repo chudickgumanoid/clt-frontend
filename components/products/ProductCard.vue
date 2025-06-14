@@ -1,11 +1,11 @@
 <template>
   <div
-    class="bg-[#5D5D5D] rounded-[20px] p-4 text-white flex flex-col items-center w-full max-w-[258px] gap-2"
+    class="bg-[#5D5D5D] rounded-[20px] p-4 text-white flex flex-col max-sm:flex-row items-center w-full max-w-[258px] max-sm:max-w-full gap-2 max-sm:gap-4"
   >
     <ApiImg
       :image-id="props.product.image"
       alt="Product"
-      class="object-contain w-full"
+      class="object-contain w-full max-sm:max-w-[150px]"
     />
 
     <div class="flex flex-col gap-4">

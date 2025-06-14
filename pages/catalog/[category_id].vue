@@ -1,31 +1,34 @@
 <template>
   <div class="container">
-    <div class="flex flex-col gap-15">
-      <div class="sticky top-0 z-10 py-4">
-        <div class="flex justify-between items-center">
+    <div class="flex flex-col gap-15 max-sm:gap-8">
+      <!-- Наверху: Назад + фильтры + корзина -->
+      <div class="sticky top-0 z-10 py-4 max-sm:static">
+        <div class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4">
           <nuxt-link
             to="/"
-            class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all"
+            class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2"
           >
             Назад
           </nuxt-link>
 
-          <div class="flex justify-between gap-6">
+          <div class="flex gap-6 max-sm:flex-col max-sm:gap-2">
             <FilterBar
               v-model="selectedFilters"
               :filters="filters"
             />
 
-            <nuxt-link to="/cart">
+            <nuxt-link to="/cart" class="self-end max-sm:self-start">
               <LazyCartButton />
             </nuxt-link>
           </div>
         </div>
       </div>
 
-      <div class="grid grid-cols-[auto_2fr] gap-10">
+      <!-- Основная часть: фильтры + товары -->
+      <div class="grid grid-cols-[auto_2fr] gap-10 max-sm:grid-cols-1 max-sm:gap-6">
+        <!-- Сайдбар -->
         <div
-          class="sticky top-[100px] self-start h-fit flex flex-col gap-2 max-h-[383px] overflow-auto pr-20"
+          class="sticky top-[100px] self-start h-fit flex flex-col gap-2 max-h-[383px] overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
         >
           <template v-if="subcategoryes.length">
             <template
@@ -42,7 +45,8 @@
           <div v-else>Список пуст</div>
         </div>
 
-        <div class="grid grid-cols-3 gap-14 gap-y-8">
+        <!-- Товары -->
+        <div class="grid grid-cols-3 gap-14 gap-y-8 max-sm:grid-cols-1">
           <template v-if="dataProducts.length">
             <ProductCard
               v-for="item in dataProducts"
@@ -56,6 +60,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import FilterBar from "~/components/category/FilterBar.vue";
@@ -124,4 +129,4 @@ const init = async () => {
 await init();
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

@@ -10,7 +10,7 @@
         </nuxt-link>
       </div>
 
-      <div class="grid grid-cols-[2fr_1fr] gap-16">
+      <div class="grid grid-cols-[2fr_1fr] max-sm:grid-cols-1 gap-16 max-sm:gap-4">
         <div class="bg-[#4B4B4B] rounded-3xl p-6 flex flex-col gap-6 relative">
           <div class="flex">
             <div class="flex flex-col gap-4 w-full">

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative w-fit">
     <img
       src="/img/cart.svg"
       alt="Корзина"
@@ -18,4 +18,4 @@
 const cart = useLocalStorage("cart", []);
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

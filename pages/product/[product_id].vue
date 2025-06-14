@@ -59,6 +59,21 @@
           </button>
         </div>
       </div>
+
+      <!-- Похожие товары -->
+      <div
+        v-if="relatedProducts.length"
+        class="mt-10"
+      >
+        <h2 class="text-2xl text-white mb-4">Похожие товары</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ProductCard
+            v-for="item in relatedProducts"
+            :key="item.id"
+            :product="item"
+          />
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -66,24 +81,39 @@
 <script setup>
 import { useLocalStorage } from "@vueuse/core";
 import { ref } from "vue";
+import ProductCard from "~/components/products/ProductCard.vue";
 import ApiImg from "~/components/UI/ApiImg.vue";
 import { tengeFormat } from "~/shared/utils/currencyFormat";
 
-useHead({ title: "Страница товара" });
+
 
 const route = useRoute();
 const { $axios } = useNuxtApp();
 const config = useRuntimeConfig();
 
-const productList = await $axios.get("/products", {
+const product = ref(null);
+const relatedProducts = ref([]);
+const activeImage = ref("");
+
+const { data } = await $axios.get("/products", {
   params: { productId: route.params.product_id },
 });
 
-// Берём первый элемент
-const product = ref(productList.data?.[0] || null);
-const activeImage = ref(product.value?.images?.[0] || "");
+const mainProduct = data?.[0];
+product.value = mainProduct;
+activeImage.value = mainProduct?.images?.[0] || "";
+
+useHead({ title: `Страница товара ${product.value?.name}` });
+if (mainProduct?.category) {
+  const related = await $axios.get("/products", {
+    params: { категория: mainProduct.category },
+  });
+
+  relatedProducts.value = related.data.filter((p) => p.id !== mainProduct.id);
+}
 
 const cart = useLocalStorage("cart", []);
+
 const addToCart = () => {
   if (!product.value) return;
 

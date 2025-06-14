@@ -1,7 +1,9 @@
 <template>
-  <div class="px-4 container flex flex-col gap-15">
+  <div class="px-4 container flex flex-col gap-15 max-sm:gap-4 relative">
     <div class="flex items-center justify-between">
-      <div class="text-primary font-bicubik text-2xl mb-6 w-full">
+      <div
+        class="text-primary font-bicubik text-2xl mb-6 w-full max-sm:text-sm max-sm:mb-0"
+      >
         Скорость - наш конёк
       </div>
 
@@ -10,7 +12,10 @@
           v-model="search"
           placeholder="поиск"
         />
-        <nuxt-link to="/cart">
+        <nuxt-link
+          to="/cart"
+          class="max-sm:hidden"
+        >
           <CartButton />
         </nuxt-link>
       </div>
@@ -30,17 +35,28 @@
       </template>
     </div>
 
-    <div class="flex flex-col gap-8">
-      <h2 class="text-white text-lg font-bold mb-4">
+    <div class="flex flex-col gap-8 max-sm:gap-4">
+      <h2 class="text-white text-lg font-bold mb-4 max-sm:mb-2">
         <CategoryTag label="Популярные товары" />
       </h2>
-      <div class="grid grid-cols-4 gap-14 gap-y-8">
+      <div class="grid grid-cols-4 max-sm:grid-cols-1 gap-14 gap-y-8">
         <ProductCard
           v-for="item in dataProducts"
           :key="item.id"
           :product="item"
         />
       </div>
+    </div>
+
+    <div
+      class="hidden max-sm:block fixed bottom-4 right-4 w-fit bg-gray-secondary p-4 rounded-2xl"
+    >
+      <nuxt-link
+        to="/cart"
+        class=""
+      >
+        <CartButton />
+      </nuxt-link>
     </div>
   </div>
 </template>
