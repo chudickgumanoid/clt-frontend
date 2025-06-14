@@ -231,7 +231,7 @@
 
         <button
           type="submit"
-          class="bg-white text-primary px-6 py-2 mt-4 rounded-lg text-2xl hover:bg-green-600 transition self-end"
+          class="bg-white text-primary px-6 py-2 mt-4 rounded-lg text-2xl self-end"
         >
           Добавить
         </button>
@@ -279,7 +279,7 @@ watch(
     if (!categoryId) return;
     try {
       const { data } = await $axios.get("/subcategoryes", {
-        params: { category: categoryId },
+        params: { categoryId: categoryId },
       });
       subcategoryOptions.value = data.map((sub) => ({
         label: sub.name,
