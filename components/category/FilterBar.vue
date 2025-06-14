@@ -38,7 +38,7 @@
 
           <label
             v-for="option in filteredOptions(filter)"
-            :key="option.id"
+            :key="option.mark + '-' + option.id"
             class="flex items-center gap-2 py-1"
           >
             <input
@@ -47,7 +47,7 @@
               :checked="isChecked(filter.filter, option.value)"
               @change="toggleFilter(filter.filter, option.value)"
             />
-            {{ option.value }}
+            <span class="font-bold">{{ option.mark }}</span> {{ option.value }}
           </label>
         </div>
       </div>
@@ -122,6 +122,8 @@ const toggleFilter = (filterName, value) => {
     ...props.modelValue,
     [key]: updated,
   });
+
+  return;
 };
 
 const getFilterKey = (label) => {
@@ -147,6 +149,23 @@ const filteredOptions = (filter) => {
       o.value.toLowerCase().includes(search.value.toLowerCase())
     );
   }
+
+  if (filter.filter === "Модель") {
+    const raw = filter.options[0];
+    const flatModels = [];
+
+    for (const [brand, models] of Object.entries(raw)) {
+      for (const model of models) {
+        flatModels.push({
+          ...model,
+          mark: brand,
+        });
+      }
+    }
+
+    return flatModels;
+  }
+
   return filter.options;
 };
 </script>
