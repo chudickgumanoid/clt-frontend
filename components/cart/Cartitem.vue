@@ -1,53 +1,44 @@
 <template>
-  <div
-    class="flex max-sm:flex-col max-sm:items-center items-start justify-between gap-4 p-4 rounded-[20px] bg-[#7E7D7D] text-white w-full max-sm:max-w-[600px]"
-  >
-    <!-- Изображение -->
-    <div class="w-[218px] h-[218px] max-sm:w-[140px] max-sm:h-[140px] shrink-0">
+  <div class="flex items-start justify-between gap-4">
+    <div class="bg-gray-[#7E7D7D] rounded-[20px] w-[218px] h-[218px]">
       <img
         :src="product.image"
         alt="image"
-        class="object-contain w-full h-full rounded-xl"
+        class="object-contain rounded-xl"
       />
     </div>
 
-    <!-- Название и описание -->
-    <div class="flex-1 max-sm:text-center">
-      <div class="text-3xl max-sm:text-xl font-semibold">
-        {{ product.name }}
-      </div>
-      <div class="text-2xl max-sm:text-sm whitespace-pre-line">
+    <div class="flex-1">
+      <div class="text-3xl">{{ product.name }}</div>
+      <div class="text-2xl">
         {{ product.description }}
       </div>
     </div>
 
-    <!-- Кол-во и цена -->
-    <div class="flex flex-col items-end max-sm:items-center gap-2">
+    <div class="flex flex-col items-end gap-2">
       <div class="flex items-center gap-2 text-white">
         <button
           v-if="!props.isNotEdit"
-          class="text-xl px-2 cursor-pointer p-2 max-sm:p-1"
+          class="text-xl px-2 cursor-pointer p-4"
           @click="decrease"
         >
           –
         </button>
-        <span class="text-2xl max-sm:text-base">{{ product.quantity }} шт</span>
+        <span class="text-2xl">{{ product.quantity }} шт</span>
         <button
           v-if="!props.isNotEdit"
-          class="text-xl px-2 cursor-pointer p-2 max-sm:p-1"
+          class="text-xl px-2 cursor-pointer p-4"
           @click="increase"
         >
           +
         </button>
       </div>
-      <div class="text-3xl max-sm:text-xl font-bold">
-        {{ tengeFormat(totalPrice) }}
-      </div>
+      <div class="text-3xl">{{ tengeFormat(totalPrice) }}</div>
     </div>
 
-    <!-- Кнопка удаления -->
     <button
-      class="text-xl px-2 absolute top-2 right-2 max-sm:static max-sm:self-end"
+      v-if="!props.isNotEdit"
+      class="text-xl px-2"
       @click="$emit('remove')"
     >
       ×
