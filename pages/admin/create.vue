@@ -52,7 +52,7 @@
           />
           <input
             v-model="form.partNumber"
-            placeholder="Номер партнера"
+            placeholder="Партномер"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
           />
           <select
