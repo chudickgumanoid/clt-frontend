@@ -1,72 +1,80 @@
 <template>
-  <div class="flex bg-[#888888] rounded-2xl p-4 items-center gap-4 text-white">
-    <div
-      class="w-[80px] h-[80px] bg-red-800 rounded-md shrink-0 overflow-hidden"
-    >
-      <ApiImg
-        v-if="product.image"
-        :image-id="product.image"
-        alt="product image"
-        class="w-full h-full object-cover"
-      />
+  <div
+    class="flex bg-[#888888] rounded-2xl p-4 items-center justify-between gap-4 text-white"
+  >
+    <div class="flex gap-2 h-fit">
+      <div class="flex flex-col gap-2 items-center">
+        <div
+          class="w-[120px] h-[120px] bg-red-800 rounded-md shrink-0 overflow-hidden"
+        >
+          <ApiImg
+            v-if="product.image"
+            :image-id="product.image"
+            alt="product image"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="text-sm">
+          {{ tengeFormat(product.price) }}
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-x-1 gap-y-5 h-fit">
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.name || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.mark || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.model || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.generation || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.part_number || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.vincode || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.quality || "—" }}
+        </div>
+        <div class="bg-[#7E7D7D] px-4 py-2 rounded-full text-lg text-center">
+          {{ product.state || "—" }}
+        </div>
+      </div>
     </div>
 
-    <div class="text-sm w-[80px] whitespace-nowrap">{{ product.price }} тг</div>
-
-    <div class="flex flex-wrap gap-2 grow">
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.name || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.mark || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.model || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.generation || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.part_number || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.vincode || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.quality || "—" }}
-      </span>
-      <span class="bg-gray-600 px-4 py-1 rounded-full text-xs">
-        {{ product.state || "—" }}
-      </span>
-    </div>
-
-    <div class="flex items-center gap-2 shrink-0">
+    <div class="flex gap-4">
+      <div class="flex items-end text-2xl gap-2 shrink-0">
+        <button
+          class="text-2xl cursor-pointer"
+          @click="changeCount('remove')"
+        >
+          −
+        </button>
+        <span>{{ count }} {{ product.unit_of_m || "шт" }}</span>
+        <button
+          class="text-2xl cursor-pointer"
+          @click="changeCount('add')"
+        >
+          +
+        </button>
+      </div>
       <button
-        class="text-lg cursor-pointer"
-        @click="changeCount('remove')"
+        class="text-5xl ml-4 -mt-18"
+        @click="removeProduct"
       >
-        −
-      </button>
-      <span>{{ count }} {{ product.unit_of_m || "шт" }}</span>
-      <button
-        class="text-lg cursor-pointer"
-        @click="changeCount('add')"
-      >
-        +
+        ×
       </button>
     </div>
-
-    <button
-      @click="removeProduct"
-      class="text-xl ml-4"
-    >
-      ×
-    </button>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { tengeFormat } from "~/shared/utils/currencyFormat";
 import ApiImg from "../UI/ApiImg.vue";
 const props = defineProps({
   product: Object,
