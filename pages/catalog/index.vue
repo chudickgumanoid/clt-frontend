@@ -108,7 +108,7 @@ const { data: subcategoryes } = await useAsyncData(
   () => {
     if (!route.query.category) return [];
     return $axios
-      .get("/subcategoryes", { params: { category: route.query.category } })
+      .get("/subcategoryes", { params: { categoryId: route.query.category } })
       .then((r) => r.data);
   },
   {
