@@ -62,6 +62,8 @@
 </template>
 
 <script setup>
+import { useDebounceFn } from "@vueuse/core";
+import { ref, watch } from "vue";
 import ProductCard from "~/components/products/ProductCard.vue";
 import MInput from "~/components/UI/MInput.vue";
 import { useProducts } from "~/shared/utils/useProducts";
@@ -72,12 +74,41 @@ useHead({
 
 const { $axios } = useNuxtApp();
 
-const { data: productsRaw } = await $axios.get("/products");
-
-const { dataProducts } = useProducts(productsRaw);
-const { data: categoryesData } = await $axios.get("/categoryes");
-
 const search = ref("");
+const dataProducts = ref([]);
+const categoryesData = ref([]);
+
+const fetchProducts = async (searchText = "") => {
+  try {
+    const { data } = await $axios.get("/products", {
+      params: { searchText },
+    });
+    const { dataProducts: processedProducts } = useProducts(data);
+    dataProducts.value = processedProducts.value;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    dataProducts.value = [];
+  }
+};
+
+const fetchCategories = async () => {
+  try {
+    const { data } = await $axios.get("/categoryes");
+    categoryesData.value = data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  }
+};
+
+const debouncedFetchProducts = useDebounceFn((searchText) => {
+  fetchProducts(searchText);
+}, 300);
+
+watch(search, (newValue) => {
+  debouncedFetchProducts(newValue);
+});
+
+await Promise.all([fetchProducts(""), fetchCategories()]);
 </script>
 
 <style scoped></style>

@@ -12,11 +12,11 @@
 const props = defineProps({
   as: {
     type: String,
-    default: "button", // 'a', 'button', 'nuxt-link', и т.д.
+    default: "button",
   },
   variant: {
     type: String,
-    default: "primary", // 'primary' | 'secondary' | 'outline'
+    default: "primary",
   },
   type: {
     type: String,

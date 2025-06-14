@@ -67,10 +67,8 @@ const handleLogin = async () => {
       },
     });
 
-    // допустим, токен сохраняем в localStorage
     localStorage.setItem("token", response.data.token);
 
-    // переход на главную
     router.push("/admin");
   } catch (err) {
     error.value = "Неверный login или пароль";

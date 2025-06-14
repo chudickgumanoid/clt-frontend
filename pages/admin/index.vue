@@ -124,7 +124,6 @@ const { $axios } = useNuxtApp();
 
 const selectedFilters = ref({});
 
-// SSR: фильтры и категории
 const { data: filters } = await useAsyncData("filters", () =>
   $axios.get("/filters").then((r) => r.data)
 );
@@ -133,7 +132,6 @@ const { data: categoryesData } = await useAsyncData("categoryes", () =>
   $axios.get("/categoryes").then((r) => r.data)
 );
 
-// SSR: подкатегории по текущей категории
 const { data: subcategoryes } = await useAsyncData(
   "subcategoryes",
   () => {
@@ -147,10 +145,8 @@ const { data: subcategoryes } = await useAsyncData(
   }
 );
 
-// 🧠 Продукты — отдельный ref, чтобы computed был реактивным
 const rawProducts = ref([]);
 
-// 👉 Запрос продуктов (и при фильтрах, и при смене query)
 const fetchProducts = async () => {
   const { data } = await $axios.get("/products", {
     params: {
@@ -170,12 +166,10 @@ const fetchProducts = async () => {
 
 await fetchProducts();
 
-// 🔁 Обновляем при смене фильтров
 watch(selectedFilters, fetchProducts, { deep: true });
-// 🔁 Обновляем при смене query
+
 watch(() => [route.query.category, route.query.subcategory], fetchProducts);
 
-// ✅ computed с нормализацией
 const { dataProducts } = useProductsRef(rawProducts);
 
 const newSubcategoryVisible = ref(false);
@@ -206,7 +200,7 @@ const createSubcategory = async () => {
     });
 
     newSubcategory.value.name = "";
-    await fetchProducts(); // перезагрузи продукты
+    await fetchProducts();
   } catch (e) {
     notify({
       message: `Ошибка при обновлении количества ${e.message}`,

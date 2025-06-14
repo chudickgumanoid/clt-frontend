@@ -289,7 +289,7 @@ watch(
         label: sub.name,
         value: sub.id,
       }));
-      form.value.subcategory = ""; // сброс при смене категории
+      form.value.subcategory = "";
     } catch (err) {
       console.error("Ошибка при загрузке подкатегорий:", err);
       subcategoryOptions.value = [];
@@ -325,7 +325,6 @@ const submitProduct = async () => {
     }
   }
 
-  // токен сразу в FormData, без записи в form
   const token = localStorage.getItem("token");
   if (token) {
     fd.append("access_token", token);
@@ -363,7 +362,7 @@ onMounted(async () => {
           carMarks.value = filter.options;
           break;
         case "Модель":
-          carModels.value = filter.options[0]; // внутри один объект с ключами-брендами
+          carModels.value = filter.options[0];
           break;
         case "Поколение":
           generations.value = filter.options;
