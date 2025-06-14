@@ -21,7 +21,7 @@
       <div
         v-show="open === filter.filter"
         :ref="(el) => setDropdownRef(filter.filter, el)"
-        class="absolute mt-2 bg-[#7E7D7D] text-white rounded-xl shadow-lg px-4 z-50 min-w-[200px] max-h-[300px] overflow-auto"
+        class="absolute mt-2 bg-[#7E7D7D] text-white rounded-xl shadow-lg px-4 z-50 min-w-[200px] max-h-[300px] overflow-auto hide-scrollbar"
       >
         <div v-if="Array.isArray(filter.options)">
           <div
@@ -182,4 +182,13 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE и Edge */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+</style>
