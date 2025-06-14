@@ -4,7 +4,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const instance = axios.create({
-    baseURL: config.public.apiBaseUrl,
+    baseURL: "http://localhost:8000/api",
   });
 
   instance.interceptors.request.use((request) => {
