@@ -1,9 +1,11 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <NotificationProvider>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </NotificationProvider>
 </template>
 
-<script setup></script>
-
-<style scoped></style>
+<script setup>
+import NotificationProvider from '~/components/NotificationProvider.vue';
+</script>

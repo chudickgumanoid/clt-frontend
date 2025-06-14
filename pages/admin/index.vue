@@ -109,6 +109,10 @@ import CreateProductModal from "~/components/admin/CreateProductModal.vue";
 import ProductRow from "~/components/admin/ProductRow.vue";
 import FilterBar from "~/components/category/FilterBar.vue";
 import { useProductsRef } from "~/shared/utils/useProducts";
+import { useNotification } from "~/shared/utils/useNotification";
+
+const { notify } = useNotification();
+
 definePageMeta({
   middleware: "admin-auth-client",
 });
@@ -186,7 +190,12 @@ watch(
 
 const createSubcategory = async () => {
   if (!newSubcategory.value.name || !newSubcategory.value.category) {
-    return alert("Заполните все поля");
+    notify({
+      message: `Заполните все поля`,
+      type: "error",
+      duration: 3000,
+    });
+    return;
   }
   const token = localStorage.getItem("token");
   try {
@@ -199,7 +208,11 @@ const createSubcategory = async () => {
     newSubcategory.value.name = "";
     await fetchProducts(); // перезагрузи продукты
   } catch (e) {
-    alert("Ошибка при создании");
+    notify({
+      message: `Ошибка при обновлении количества ${e.message}`,
+      type: "error",
+      duration: 5000,
+    });
   }
 };
 

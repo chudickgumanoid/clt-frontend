@@ -94,6 +94,9 @@
 
 <script setup>
 const emit = defineEmits(["update:modelValue", "success"]);
+import { useNotification } from "~/shared/utils/useNotification";
+const { notify } = useNotification();
+
 const props = defineProps({
   modelValue: Boolean,
 });
@@ -133,8 +136,12 @@ const submitProduct = async () => {
     await $axios.post("/products", fd);
     emit("update:modelValue", false);
     emit("success");
-  } catch {
-    alert("Ошибка при добавлении");
+  } catch (e) {
+    notify({
+      message: `Ошибка при обновлении количества ${e.message}`,
+      type: "error",
+      duration: 3000,
+    });
   }
 };
 </script>

@@ -241,6 +241,10 @@
 </template>
 
 <script setup>
+import { useNotification } from "~/shared/utils/useNotification";
+
+const { notify } = useNotification();
+
 definePageMeta({
   middleware: "admin-auth-client",
 });
@@ -329,9 +333,17 @@ const submitProduct = async () => {
 
   try {
     await $axios.post("/products", fd);
-    alert("Успешно добавлено");
-  } catch {
-    alert("Ошибка при добавлении");
+    notify({
+      message: "Успешно добавлено!",
+      type: "error",
+      duration: 3000,
+    });
+  } catch (e) {
+    notify({
+      message: `Ошибка при обновлении количества ${e.message}`,
+      type: "error",
+      duration: 5000,
+    });
   }
 };
 

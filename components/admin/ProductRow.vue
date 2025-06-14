@@ -76,6 +76,9 @@
 import { ref } from "vue";
 import { tengeFormat } from "~/shared/utils/currencyFormat";
 import ApiImg from "../UI/ApiImg.vue";
+import { useNotification } from "~/shared/utils/useNotification";
+
+const { notify } = useNotification();
 const props = defineProps({
   product: Object,
 });
@@ -93,7 +96,11 @@ const changeCount = async (action) => {
     if (action === "add") count.value++;
     else if (action === "remove" && count.value > 0) count.value--;
   } catch (e) {
-    alert("Ошибка при обновлении количества");
+    notify({
+      message: `Ошибка при обновлении количества ${e.message}`,
+      type: "error",
+      duration: 5000,
+    });
   }
 };
 
@@ -101,7 +108,11 @@ const removeProduct = async () => {
   try {
     await $axios.delete(`/products?productId=${props.product.id}`);
   } catch (e) {
-    alert("Ошибка при удалении");
+    notify({
+      message: `Ошибка при удалении продукта ${e.message}`,
+      type: "error",
+      duration: 5000,
+    });
   }
 };
 </script>
