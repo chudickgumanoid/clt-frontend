@@ -6,6 +6,7 @@
       <!-- Drag-and-drop загрузка слева -->
       <div
         class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-6 text-center"
+        :class="errors.images ? 'border-red-500' : 'border-gray-300'"
         @dragover.prevent
         @drop.prevent="handleDrop"
       >
@@ -57,7 +58,11 @@
           />
           <select
             v-model="form.category"
-            class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+            :class="[
+              'bg-[#7E7D7D] px-4 py-2 rounded-full h-12',
+              errors.category && 'border-2 border-red-500',
+            ]"
+            @blur="clearErrorIfValid('category')"
           >
             <option
               disabled
@@ -77,6 +82,11 @@
           <select
             v-model="form.subcategory"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
+            :class="[
+              'bg-[#7E7D7D] px-4 py-2 rounded-full h-12',
+              errors.subcategory && 'border-2 border-red-500',
+            ]"
+            @blur="clearErrorIfValid('subcategory')"
           >
             <option
               disabled
@@ -127,43 +137,17 @@
             <option>Кг</option>
           </select>
 
-          <select
+          <input
             v-model="form.mark"
+            placeholder="Марка авто"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
-            <option
-              disabled
-              value=""
-            >
-              Марка авто
-            </option>
-            <option
-              v-for="mark in carMarks"
-              :key="mark.id"
-              :value="mark.value"
-            >
-              {{ mark.value }}
-            </option>
-          </select>
+          />
 
-          <select
+          <input
             v-model="form.model"
+            placeholder="Модель"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
-            <option
-              disabled
-              value=""
-            >
-              Модель
-            </option>
-            <option
-              v-for="model in carModels[form.mark] || []"
-              :key="model.id"
-              :value="model.value"
-            >
-              {{ model.value }}
-            </option>
-          </select>
+          />
 
           <input
             v-model.number="form.count"
@@ -172,24 +156,11 @@
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
           />
 
-          <select
+          <input
             v-model="form.generation"
+            placeholder="Поколение"
             class="bg-[#7E7D7D] px-4 py-2 rounded-full h-12"
-          >
-            <option
-              disabled
-              value=""
-            >
-              Поколение
-            </option>
-            <option
-              v-for="gen in generations"
-              :key="gen.id"
-              :value="gen.value"
-            >
-              {{ gen.value }}
-            </option>
-          </select>
+          />
 
           <input
             v-model="form.vincode"
@@ -218,9 +189,9 @@
         </div>
 
         <div class="mt-4 flex items-center justify-between">
-          <span class="text-lg font-semibold">{{
-            form.price ? form.price + " тг" : ""
-          }}</span>
+          <span class="text-lg font-semibold">
+            {{ form.price ? form.price + " тг" : "" }}
+          </span>
           <input
             v-model.number="form.price"
             type="number"
@@ -231,7 +202,7 @@
 
         <button
           type="submit"
-          class="bg-white text-primary px-6 py-2 mt-4 rounded-lg text-2xl self-end"
+          class="bg-white text-primary px-6 py-2 mt-4 rounded-lg text-2xl self-end cursor-pointer"
         >
           Добавить
         </button>
@@ -297,6 +268,36 @@ watch(
   }
 );
 
+const errors = ref({
+  category: false,
+  subcategory: false,
+  images: false,
+});
+
+const validateForm = () => {
+  let isValid = true;
+  const fieldsToCheck = ["category", "subcategory", "images"];
+
+  fieldsToCheck.forEach((field) => {
+    const isEmpty =
+      !form.value[field] ||
+      (Array.isArray(form.value[field]) && form.value[field].length === 0);
+
+    errors.value[field] = isEmpty;
+    if (isEmpty) isValid = false;
+  });
+
+  return isValid;
+};
+
+const clearErrorIfValid = (field) => {
+  const val = form.value[field];
+  const isEmpty = !val || (Array.isArray(val) && val.length === 0);
+  if (!isEmpty) {
+    errors.value[field] = false;
+  }
+};
+
 const imagePreviews = ref([]);
 
 const updateImagePreviews = (files) => {
@@ -309,13 +310,17 @@ const updateImagePreviews = (files) => {
 
 const handleFileUpload = (e) => {
   updateImagePreviews(Array.from(e.target.files));
+  clearErrorIfValid("images");
 };
 
 const handleDrop = (e) => {
   updateImagePreviews(Array.from(e.dataTransfer.files));
+  clearErrorIfValid("images");
 };
 
 const submitProduct = async () => {
+  if (!validateForm()) return;
+
   const fd = new FormData();
   for (const [key, val] of Object.entries(form.value)) {
     if (key === "images") {
@@ -334,7 +339,7 @@ const submitProduct = async () => {
     await $axios.post("/products", fd);
     notify({
       message: "Успешно добавлено!",
-      type: "error",
+      type: "success",
       duration: 3000,
     });
   } catch (e) {
