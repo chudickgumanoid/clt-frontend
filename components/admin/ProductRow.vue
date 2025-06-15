@@ -104,9 +104,11 @@ const changeCount = async (action) => {
   }
 };
 
+const emit = defineEmits(["deleted"]);
 const removeProduct = async () => {
   try {
     await $axios.delete(`/products?productId=${props.product.id}`);
+    emit("deleted");
   } catch (e) {
     notify({
       message: `Ошибка при удалении продукта ${e.message}`,

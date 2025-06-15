@@ -99,6 +99,7 @@
             v-for="item in dataProducts"
             :key="item.id"
             :product="item"
+            @deleted="fetchProducts"
           />
         </div>
       </div>
