@@ -48,7 +48,13 @@
                   <div class="bg-[#5D5D5D] rounded-2xl py-4 w-[116%]">
                     <button
                       class="text-white text-sm px-1 py-1 rounded w-full"
-                      @click="newSubcategoryVisible = !newSubcategoryVisible"
+                      @click="
+                        () => {
+                          newSubcategoryVisible = !newSubcategoryVisible;
+                          newSubcategory.value.category =
+                            selectedCategoryId.value;
+                        }
+                      "
                     >
                       Добавить подкатегорию +
                     </button>
@@ -192,7 +198,7 @@ watch(
 );
 
 const createSubcategory = async () => {
-  if (!newSubcategory.value.name || !newSubcategory.value.category) {
+  if (!newSubcategory.value.name) {
     notify({
       message: `Заполните все поля`,
       type: "error",
@@ -204,12 +210,17 @@ const createSubcategory = async () => {
   try {
     await $axios.post("/subcategoryes", {
       name: newSubcategory.value.name,
-      categoryId: newSubcategory.value.category,
+      categoryId: newSubcategory.value.category || selectedCategoryId.value,
       access_token: token,
     });
 
     newSubcategory.value.name = "";
     await fetchProducts();
+    notify({
+      message: `Подкатегория добавлена`,
+      type: "success",
+      duration: 3000,
+    });
   } catch (e) {
     notify({
       message: `Ошибка при обновлении количества ${e.message}`,
