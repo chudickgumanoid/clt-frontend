@@ -8,6 +8,10 @@
     >
       <button
         class="px-4 py-2 rounded-full bg-[#7E7D7D] text-white flex items-center gap-2"
+        :class="{
+          'opacity-50 pointer-events-none':
+            filter.filter === 'Модель' && !hasSelected('Марка авто'),
+        }"
         @click="toggleOpen(filter.filter)"
       >
         <input
@@ -36,6 +40,13 @@
             />
           </div>
 
+          <div
+            v-if="filter.filter === 'Модель' && !hasSelected('Марка авто')"
+            class="py-2 text-sm text-gray-200 italic"
+          >
+            Сначала выберите марку авто
+          </div>
+
           <label
             v-for="option in filteredOptions(filter)"
             :key="option.mark + '-' + option.id"
@@ -57,7 +68,7 @@
 
 <script setup>
 import { onClickOutside } from "@vueuse/core";
-import { ref } from "vue";
+import { onUnmounted, ref } from "vue";
 
 const props = defineProps({
   filters: Array,
@@ -94,6 +105,8 @@ const setDropdownRef = (key, el) => {
 };
 
 const toggleOpen = (key) => {
+  if (key === "Модель" && !hasSelected("Марка авто")) return;
+
   if (open.value === key) {
     open.value = null;
     search.value = "";
@@ -119,17 +132,17 @@ const toggleFilter = (filterName, value) => {
   const key = getFilterKey(filterName);
   const current = props.modelValue?.[key] || [];
   let updated = [];
+
   if (current.includes(value)) {
     updated = current.filter((v) => v !== value);
   } else {
     updated = [...current, value];
   }
+
   emit("update:modelValue", {
     ...props.modelValue,
     [key]: updated,
   });
-
-  return;
 };
 
 const getFilterKey = (label) => {
@@ -158,13 +171,20 @@ const filteredOptions = (filter) => {
 
   if (filter.filter === "Модель") {
     const raw = filter.options[0];
+    const selectedMarks = props.modelValue?.mark || [];
+
+    if (!selectedMarks.length) {
+      return [];
+    }
+
     const flatModels = [];
 
-    for (const [brand, models] of Object.entries(raw)) {
+    for (const mark of selectedMarks) {
+      const models = raw[mark] || [];
       for (const model of models) {
         flatModels.push({
           ...model,
-          mark: brand,
+          mark,
         });
       }
     }
@@ -184,11 +204,11 @@ onUnmounted(() => {
 
 <style scoped>
 .hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE и Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
 </style>
