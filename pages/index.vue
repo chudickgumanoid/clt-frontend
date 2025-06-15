@@ -81,7 +81,7 @@ const categoryesData = ref([]);
 const fetchProducts = async (searchText = "") => {
   try {
     const { data } = await $axios.get("/products", {
-      params: { searchText },
+      params: { searchText: searchText ? searchText : undefined },
     });
     const { dataProducts: processedProducts } = useProducts(data);
     dataProducts.value = processedProducts.value;
