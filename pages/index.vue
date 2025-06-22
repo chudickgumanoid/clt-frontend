@@ -4,16 +4,16 @@
       <div
         class="text-primary font-bicubik text-2xl mb-6 w-full max-sm:text-sm max-sm:mb-0"
       >
-        Скорость - наш конёк
+        {{ t("Скорость - наш конёк") }}
       </div>
 
       <div class="flex justify-between items-center gap-12">
         <MInput
           v-model="search"
-          placeholder="поиск"
+          :placeholder="t('поиск')"
         />
         <nuxt-link
-          to="/cart"
+          :to="$localePath('/cart')"
           class="max-sm:hidden"
         >
           <CartButton />
@@ -26,7 +26,7 @@
         v-for="category in categoryesData"
         :key="category"
       >
-        <nuxt-link :to="`/catalog?category=${category.id}`">
+        <nuxt-link :to="$localePath(`/catalog?category=${category.id}`)">
           <CategoryTag
             class="!cursor-pointer"
             :label="category.name"
@@ -63,10 +63,11 @@
 
 <script setup>
 import { useDebounceFn } from "@vueuse/core";
-import { ref, watch } from "vue";
 import ProductCard from "~/components/products/ProductCard.vue";
 import MInput from "~/components/UI/MInput.vue";
 import { useProducts } from "~/shared/utils/useProducts";
+
+const { t } = useI18n();
 
 useHead({
   title: "CLT - Магазин запчастей",

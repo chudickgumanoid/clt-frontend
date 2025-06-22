@@ -1,1 +1,1 @@
-export const BASE_API_URL = "https://f46cf44da7f5720be8048f8bb379e29d.serveo.net/api"
+export const BASE_API_URL = "http://185.125.88.182:5050/api"

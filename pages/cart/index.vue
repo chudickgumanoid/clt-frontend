@@ -3,10 +3,10 @@
     <div class="flex flex-col gap-14">
       <div>
         <nuxt-link
-          to="/"
+          :to="$localePath('/')"
           class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all"
         >
-          Назад
+          {{ $t("Назад") }}
         </nuxt-link>
       </div>
 
@@ -21,9 +21,9 @@
           >
             <Cartitem
               :product="item"
+              :isNotEdit="false"
               @update-quantity="handleQuantityChange"
               @remove="removeItem(item.id)"
-              :isNotEdit='false'
             />
           </div>
         </div>
@@ -31,7 +31,7 @@
           v-else
           class="text-white text-xl text-center"
         >
-          Корзина пуста
+          {{ $t('Корзина пуста') }}
         </div>
 
         <div
@@ -39,13 +39,13 @@
           class="flex justify-end items-end flex-col gap-6"
         >
           <div class="flex flex-col gap-3 text-3xl">
-            <div>Общее количество: {{ currencyFormat(totalQty) }} шт</div>
-            <div>Общая стоимость: {{ tengeFormat(totalSum) }}</div>
+            <div>{{ $t('Общее количество') }}: {{ currencyFormat(totalQty) }} шт</div>
+            <div>{{ $t('Общая стоимость') }}: {{ tengeFormat(totalSum) }}</div>
           </div>
 
           <div class="flex">
             <MButton @click="router.push('/cart/bue')">
-              Оформить заказ
+              {{ $t('Оформить заказ') }}
             </MButton>
           </div>
         </div>

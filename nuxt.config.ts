@@ -12,10 +12,19 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/google-fonts",
     "@vueuse/nuxt",
+    "@nuxtjs/i18n",
   ],
   css: ["~/assets/css/main.css"],
 
   vite: { plugins: [tailwindcss()] },
+
+  i18n: {
+    defaultLocale: 'ru',
+    locales: [
+      { code: 'ru', name: 'Русский', file: 'ru.json' },
+      { code: 'kz', name: 'Казахский', file: 'kz.json' }
+    ]
+  },
 
   googleFonts: {
     families: {

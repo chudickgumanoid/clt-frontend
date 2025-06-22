@@ -35,7 +35,7 @@
             <input
               v-model="search"
               type="text"
-              placeholder="поиск"
+              :placeholder="t('поиск')"
               class="w-full px-2 py-1 rounded-full bg-[#5D5D5D] text-white placeholder-gray-300"
             />
           </div>
@@ -44,7 +44,7 @@
             v-if="filter.filter === 'Модель' && !hasSelected('Марка авто')"
             class="py-2 text-sm text-gray-200 italic"
           >
-            Сначала выберите марку авто
+            {{ $t("Сначала выберите марку авто") }}
           </div>
 
           <label
@@ -74,6 +74,8 @@ const props = defineProps({
   filters: Array,
   modelValue: Object,
 });
+
+const { t } = useI18n();
 
 const emit = defineEmits(["update:modelValue"]);
 

@@ -18,7 +18,7 @@ import { LazyMainFooter } from "#components";
   flex-direction: column;
   min-height: 100vh;
 
-  background-image: url("/img/background.png");
+  background-image: url("/img/background.jpg");
   /** background: #000; **/
   background-size: cover;
   background-position: center;

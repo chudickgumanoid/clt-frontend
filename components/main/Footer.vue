@@ -5,7 +5,7 @@
     >
       <div>
         <div class="flex justify-center items-center gap-3">
-          Если не нашли запчасть, пишите нам на WhatsApp
+          {{ $t("Если не нашли запчасть, пишите нам на WhatsApp") }}
           <img
             src="/img/whatsapp.svg"
             alt="Whatsapp"
@@ -28,7 +28,7 @@
           src="/img/car.svg"
           alt="Грузовик"
         />
-        Доставка по городу Алматы и регионам
+        {{ $t("Доставка по городу Алматы и регионам") }}
       </div>
     </div>
   </footer>

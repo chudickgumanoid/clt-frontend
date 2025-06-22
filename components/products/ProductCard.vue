@@ -17,8 +17,8 @@
         </div>
       </div>
       <div class="flex items-center justify-between gap-2 w-full">
-        <nuxt-link :to="`/product/${props.product.id}`">
-          <MButton> Смотреть </MButton>
+        <nuxt-link :to="$localePath(`/product/${props.product.id}`)">
+          <MButton> {{ $t("Смотреть") }} </MButton>
         </nuxt-link>
 
         <button
@@ -44,6 +44,8 @@ import ApiImg from "../UI/ApiImg.vue";
 import MButton from "../UI/MButton.vue";
 import { BASE_API_URL } from "~/shared/utils/constants";
 
+const { t } = useI18n();
+
 const props = defineProps({
   product: Object,
 });
@@ -57,10 +59,11 @@ const addToCart = () => {
   if (existing) {
     existing.quantity += 1;
   } else {
+    console.log(props.product, 'props.product.image')  
     cart.value.push({
       ...props.product,
       quantity: 1,
-      image: `${BASE_API_URL}/image?imageId=${props.product.image}`,
+      image: `${BASE_API_URL}/image?imageId=${props.product.images[0]}`,
     });
   }
 };

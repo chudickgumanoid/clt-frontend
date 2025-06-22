@@ -6,10 +6,10 @@
           class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4"
         >
           <nuxt-link
-            to="/"
+            :to="$localePath('/')"
             class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2 max-sm:w-fit"
           >
-            Назад
+            {{ $t("Назад") }}
           </nuxt-link>
 
           <div class="flex gap-6 max-sm:flex-col max-sm:gap-2">
@@ -19,7 +19,7 @@
             />
 
             <nuxt-link
-              to="/cart"
+              :to="$localePath('/cart')"
               class="self-end max-sm:self-start"
             >
               <LazyCartButton />
@@ -40,7 +40,7 @@
               :key="category.id"
             >
               <nuxt-link
-                :to="`/catalog?category=${category.id}`"
+                :to="$localePath(`/catalog?category=${category.id}`)"
                 class="max-sm:w-auto"
               >
                 <CategoryTag
@@ -56,7 +56,11 @@
               :key="subcategory.id"
             >
               <nuxt-link
-                :to="`/catalog?category=${route.query.category}&subcategory=${subcategory.id}`"
+                :to="
+                  $localePath(
+                    `/catalog?category=${route.query.category}&subcategory=${subcategory.id}`
+                  )
+                "
               >
                 <CategoryTag
                   :label="subcategory.name"
@@ -75,7 +79,7 @@
               :product="item"
             />
           </template>
-          <div v-else>Список пуст</div>
+          <div v-else>{{ $t("Список пуст") }}</div>
         </div>
       </div>
     </div>
@@ -88,6 +92,8 @@ import FilterBar from "~/components/category/FilterBar.vue";
 import ProductCard from "~/components/products/ProductCard.vue";
 import { useProductsRef } from "~/shared/utils/useProducts";
 useHead({ title: "Каталог" });
+
+const { t } = useI18n();
 
 const route = useRoute();
 const { $axios } = useNuxtApp();
