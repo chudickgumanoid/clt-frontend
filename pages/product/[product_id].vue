@@ -124,7 +124,6 @@ const addToCart = () => {
   if (existing) {
     existing.quantity += 1;
   } else {
-    console.log(product.value, 'product.value')
     cart.value.push({
       ...product.value,
       quantity: 1,

@@ -140,6 +140,7 @@ const formState = ref({
   address: "",
   additional_phone: "",
   promocode: "",
+  vincode: "",
 });
 
 const errors = ref({

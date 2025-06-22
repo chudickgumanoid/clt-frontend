@@ -59,7 +59,6 @@ const addToCart = () => {
   if (existing) {
     existing.quantity += 1;
   } else {
-    console.log(props.product, 'props.product.image')  
     cart.value.push({
       ...props.product,
       quantity: 1,

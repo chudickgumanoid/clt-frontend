@@ -360,7 +360,6 @@ const states = ref([]);
 onMounted(async () => {
   try {
     const { data: filters } = await $axios.get("/filters");
-    console.log(filters, "filters");
     for (const filter of filters) {
       switch (filter.filter) {
         case "Марка авто":
