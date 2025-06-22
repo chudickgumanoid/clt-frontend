@@ -68,6 +68,12 @@
       >
         ×
       </button>
+      <button
+        class="text-xl bg-yellow-500 px-3 py-1 rounded"
+        @click="$router.push(`/admin/edit/${product.id}`)"
+      >
+        ✎
+      </button>
     </div>
   </div>
 </template>
@@ -75,8 +81,8 @@
 <script setup>
 import { ref } from "vue";
 import { tengeFormat } from "~/shared/utils/currencyFormat";
-import ApiImg from "../UI/ApiImg.vue";
 import { useNotification } from "~/shared/utils/useNotification";
+import ApiImg from "../UI/ApiImg.vue";
 
 const { notify } = useNotification();
 const props = defineProps({
