@@ -1,10 +1,10 @@
 <template>
   <section class="container relative">
-    <div class="flex flex-col gap-14">
+    <div class="flex flex-col gap-14 max-sm:gap-4">
       <div class="flex justify-between items-center gap-12">
         <nuxt-link
           :to="$localePath('/')"
-          class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all"
+          class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-[13px]"
         >
           {{ $t("Назад") }}
         </nuxt-link>
@@ -16,16 +16,16 @@
 
       <div
         v-if="product"
-        class="grid grid-cols-[2fr_1fr] gap-10 bg-[#4B4B4B] rounded-3xl p-8 text-white"
+        class="grid grid-cols-[2fr_1fr] max-sm:grid-cols-1 gap-10 bg-[#4B4B4B] rounded-3xl p-8 text-white"
       >
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col max-sm:flex-row gap-6">
           <ApiImg
             :image-id="activeImage"
             class="rounded-xl object-contain w-full max-h-[400px]"
             alt="Product image"
           />
 
-          <div class="flex gap-2">
+          <div class="flex max-sm:flex-col gap-2">
             <img
               v-for="img in product.images"
               :key="img"
@@ -41,12 +41,31 @@
           <div class="flex flex-col gap-2">
             <div class="text-2xl font-semibold">{{ product.name }}</div>
             <div class="text-sm text-gray-300">{{ product.description }}</div>
-            <div class="text-xl mt-2">{{ tengeFormat(product.price) }}</div>
+            <div class="text-xl mt-2 max-sm:hidden">
+              {{ tengeFormat(product.price) }}
+            </div>
           </div>
 
+          <div class="hidden max-sm:flex justify-between items-center">
+            <div class="hidden text-xl mt-2 max-sm:block">
+              {{ tengeFormat(product.price) }}
+            </div>
+
+            <button
+              :title="t('Добавить в корзину')"
+              class="cursor-pointer flex items-end justify-end gap-2 px-6 py-3 text-black font-semibold transition-all text-lg"
+              @click.stop="addToCart"
+            >
+              <img
+                src="/img/cart.svg"
+                class="h-10 max-h-10"
+                :alt="t('В корзину')"
+              />
+            </button>
+          </div>
           <button
             :title="t('Добавить в корзину')"
-            class="cursor-pointer flex items-end justify-end gap-2 px-6 py-3 text-black font-semibold transition-all text-lg"
+            class="max-sm:hidden cursor-pointer flex items-end justify-end gap-2 px-6 py-3 text-black font-semibold transition-all text-lg"
             @click.stop="addToCart"
           >
             <img
@@ -62,7 +81,9 @@
         v-if="relatedProducts.length"
         class="mt-10"
       >
-        <h2 class="text-2xl text-white mb-4">{{ $t("Похожие товары") }}</h2>
+        <h2 class="text-2xl text-white mb-4 max-sm:hidden">
+          {{ $t("Похожие товары") }}
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <ProductCard
             v-for="item in relatedProducts"
@@ -105,7 +126,7 @@ product.value = mainProduct;
 activeImage.value = mainProduct?.images?.[0] || "";
 
 useHead({
-  title: t('productTitle', { name: product.value?.name || '' })
+  title: t("productTitle", { name: product.value?.name || "" }),
 });
 if (mainProduct?.category) {
   const related = await $axios.get("/products", {

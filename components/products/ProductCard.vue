@@ -18,7 +18,9 @@
       </div>
       <div class="flex items-center justify-between gap-2 w-full">
         <nuxt-link :to="$localePath(`/product/${props.product.id}`)">
-          <MButton> {{ $t("Смотреть") }} </MButton>
+          <MButton class="max-sm:!text-[15px] max-sm:!rounded-[10px]">
+            {{ $t("Смотреть") }}
+          </MButton>
         </nuxt-link>
 
         <button
@@ -28,7 +30,7 @@
         >
           <img
             src="/img/cart.svg"
-            class="h-10 max-h-10"
+            class="h-10 max-h-10 max-sm:w-6 max-sm:h-6"
             alt="В корзину"
           />
         </button>

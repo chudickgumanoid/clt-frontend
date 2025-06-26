@@ -1,10 +1,10 @@
 <template>
   <section class="container relative">
-    <div class="flex flex-col gap-14">
+    <div class="flex flex-col gap-14 max-sm:gap-10">
       <div>
         <nuxt-link
           :to="$localePath('/cart')"
-          class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all"
+          class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-[13px]"
         >
           {{ $t("Назад") }}
         </nuxt-link>
@@ -37,9 +37,9 @@
           </div>
           <div
             v-if="cart.length"
-            class="flex justify-end items-end flex-col gap-6 sticky bottom-0 bg-[#4B4B4B] py-4"
+            class="flex justify-end items-end max-sm:items-center max-sm:justify-center flex-col gap-6 sticky bottom-0 bg-[#4B4B4B] py-4"
           >
-            <div class="flex flex-col gap-3 text-3xl">
+            <div class="flex flex-col gap-3 text-3xl max-sm:text-base max-sm:text-center">
               <div>
                 {{ $t("Общее количество") }}: {{ currencyFormat(totalQty) }} шт
               </div>

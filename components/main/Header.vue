@@ -13,25 +13,27 @@
         />
       </nuxt-link>
 
-      <div class="flex items-center justify-center gap-10">
+      <div class="flex items-center justify-center gap-10 max-sm:gap-4">
         <LangSwitcher />
         <div
-          class="flex items-center justify-center gap-3 text-3xl max-sm:text-sm"
+          class="flex items-center justify-center gap-3 max-sm:gap-2 text-3xl max-sm:text-[10px]"
         >
           <img
             src="/img/map-point.svg"
             alt="Адрес"
+            class="max-sm:h-4 max-sm:w-4"
           />
-          {{ $t('Адрес') }}
+          {{ $t("Адрес") }}
         </div>
         <div
-          class="flex items-center justify-center gap-3 text-3xl max-sm:text-sm"
+          class="flex items-center justify-center gap-3 max-sm:gap-2 text-3xl max-sm:text-[10px]"
         >
           <img
             src="/img/phone.svg"
             alt="Телефон"
+            class="max-sm:h-4 max-sm:w-4"
           />
-          {{ $t('Телефон') }}
+          {{ $t("Телефон") }}
         </div>
       </div>
     </div>
@@ -39,7 +41,7 @@
 </template>
 
 <script setup>
-import LangSwitcher from '../lang/LangSwitcher.vue';
+import LangSwitcher from "../lang/LangSwitcher.vue";
 
 const { t } = useI18n();
 </script>

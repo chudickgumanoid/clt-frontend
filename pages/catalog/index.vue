@@ -1,86 +1,145 @@
 <template>
-  <div class="container">
-    <div class="flex flex-col gap-15 max-sm:gap-8">
-      <div class="sticky top-0 z-10 py-4 max-sm:static">
-        <div
-          class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4"
-        >
-          <nuxt-link
-            :to="$localePath('/')"
-            class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2 max-sm:w-fit"
+  <div class="max-sm:-mt-10">
+    <div class="container">
+      <div class="flex flex-col gap-15 max-sm:gap-8">
+        <div class="sticky top-0 z-10 py-4 max-sm:static">
+          <div
+            class="flex justify-between items-center max-sm:flex-col max-sm:items-stretch max-sm:gap-4"
           >
-            {{ $t("Назад") }}
-          </nuxt-link>
+            <div class="flex gap-6">
+              <nuxt-link
+                :to="$localePath('/')"
+                class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2 max-sm:w-fit"
+              >
+                {{ $t("Назад") }}
+              </nuxt-link>
 
-          <div class="flex gap-6 max-sm:flex-col max-sm:gap-2">
-            <FilterBar
-              v-model="selectedFilters"
-              :filters="filters"
-            />
+              <div
+                class="sticky top-[100px] hidden max-sm:flex self-start h-fit flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-y-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
+              >
+                <template v-if="!subcategoryes.length">
+                  <template
+                    v-for="category in categoryesData"
+                    :key="category.id"
+                  >
+                    <nuxt-link
+                      :to="$localePath(`/catalog?category=${category.id}`)"
+                      class="max-sm:w-auto"
+                    >
+                      <CategoryTag
+                        :label="category.name"
+                        class="cursor-pointer"
+                      />
+                    </nuxt-link>
+                  </template>
+                </template>
+                <template v-else>
+                  <template
+                    v-for="subcategory in subcategoryes"
+                    :key="subcategory.id"
+                  >
+                    <nuxt-link
+                      :to="
+                        $localePath(
+                          `/catalog?category=${route.query.category}&subcategory=${subcategory.id}`
+                        )
+                      "
+                    >
+                      <CategoryTag
+                        :label="subcategory.name"
+                        class="cursor-pointer"
+                      />
+                    </nuxt-link>
+                  </template>
+                </template>
+              </div>
+            </div>
 
-            <nuxt-link
-              :to="$localePath('/cart')"
-              class="self-end max-sm:self-start"
-            >
-              <LazyCartButton />
-            </nuxt-link>
+            <div class="flex gap-6 max-sm:flex-col max-sm:gap-2">
+              <FilterBar
+                v-model="selectedFilters"
+                :filters="filters"
+              />
+
+              <nuxt-link
+                :to="$localePath('/cart')"
+                class="self-end max-sm:hidden"
+              >
+                <LazyCartButton />
+              </nuxt-link>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="grid grid-cols-[auto_2fr] gap-8 max-sm:grid-cols-1 max-sm:gap-6"
+        >
+          <div
+            class="sticky top-[100px] max-sm:hidden self-start h-fit flex flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
+          >
+            <template v-if="!subcategoryes.length">
+              <template
+                v-for="category in categoryesData"
+                :key="category.id"
+              >
+                <nuxt-link
+                  :to="$localePath(`/catalog?category=${category.id}`)"
+                  class="max-sm:w-auto"
+                >
+                  <CategoryTag
+                    :label="category.name"
+                    class="cursor-pointer"
+                  />
+                </nuxt-link>
+              </template>
+            </template>
+            <template v-else>
+              <template
+                v-for="subcategory in subcategoryes"
+                :key="subcategory.id"
+              >
+                <nuxt-link
+                  :to="
+                    $localePath(
+                      `/catalog?category=${route.query.category}&subcategory=${subcategory.id}`
+                    )
+                  "
+                >
+                  <CategoryTag
+                    :label="subcategory.name"
+                    class="cursor-pointer"
+                  />
+                </nuxt-link>
+              </template>
+            </template>
+          </div>
+
+          <div class="grid grid-cols-3 gap-14 gap-y-8 max-sm:grid-cols-1">
+            <template v-if="dataProducts.length">
+              <ProductCard
+                v-for="item in dataProducts"
+                :key="item.id"
+                :product="item"
+              />
+            </template>
+            <div v-else>{{ $t("Список пуст") }}</div>
           </div>
         </div>
       </div>
+    </div>
 
+    <div
+      class="hidden max-sm:block w-full sticky bottom-0 mt-4 right-0 bg-gray-secondary"
+    >
       <div
-        class="grid grid-cols-[auto_2fr] gap-8 max-sm:grid-cols-1 max-sm:gap-6"
+        class="flex items-center justify-center bg-white w-fit mx-auto rounded-full p-2 relative bottom-2"
       >
-        <div
-          class="sticky top-[100px] self-start h-fit flex flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
+        <nuxt-link
+          to="/cart"
+          class=""
         >
-          <template v-if="!subcategoryes.length">
-            <template
-              v-for="category in categoryesData"
-              :key="category.id"
-            >
-              <nuxt-link
-                :to="$localePath(`/catalog?category=${category.id}`)"
-                class="max-sm:w-auto"
-              >
-                <CategoryTag
-                  :label="category.name"
-                  class="cursor-pointer"
-                />
-              </nuxt-link>
-            </template>
-          </template>
-          <template v-else>
-            <template
-              v-for="subcategory in subcategoryes"
-              :key="subcategory.id"
-            >
-              <nuxt-link
-                :to="
-                  $localePath(
-                    `/catalog?category=${route.query.category}&subcategory=${subcategory.id}`
-                  )
-                "
-              >
-                <CategoryTag
-                  :label="subcategory.name"
-                  class="cursor-pointer"
-                />
-              </nuxt-link>
-            </template>
-          </template>
-        </div>
-
-        <div class="grid grid-cols-3 gap-14 gap-y-8 max-sm:grid-cols-1">
-          <template v-if="dataProducts.length">
-            <ProductCard
-              v-for="item in dataProducts"
-              :key="item.id"
-              :product="item"
-            />
-          </template>
-          <div v-else>{{ $t("Список пуст") }}</div>
-        </div>
+          <CartButton class="max-w-[45px] max-h-[45px] w-[45px] h-[45px]" />
+        </nuxt-link>
       </div>
     </div>
   </div>
