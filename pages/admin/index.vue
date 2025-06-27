@@ -1,10 +1,9 @@
 <template>
   <div class="container">
-    <div class="flex flex-col gap-15">
-      <!-- Top bar -->
+    <div class="flex flex-col gap-15 max-sm:gap-0 max-sm:-mt-10">
       <div class="sticky top-0 z-10 py-4">
         <div class="flex justify-between items-center">
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-4 max-sm:hidden">
             <FilterBar
               v-model="selectedFilters"
               :filters="filters"
@@ -27,9 +26,11 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-[auto_2fr] gap-10">
+      <div
+        class="grid grid-cols-[auto_2fr] max-sm:grid-cols-1 gap-10 max-sm:gap-4"
+      >
         <div
-          class="sticky top-[100px] w-full self-start h-fit flex flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-auto pr-20 max-sm:static max-sm:overflow-visible max-sm:pr-0"
+          class="sticky top-[100px] w-full self-start h-fit flex flex-col max-sm:flex-row max-sm:flex-wrap gap-2 max-h-[383px] max-sm:max-h-auto overflow-auto pr-20 max-sm:overflow-visible max-sm:pr-0 max-sm:max-h-full max-sm:items-center max-sm:justify-center max-sm:max-w-[240px] max-sm:mx-auto max-sm:static"
         >
           <template
             v-for="category in categoryesData"
@@ -44,7 +45,7 @@
 
               <!-- Подкатегории для выбранной категории -->
               <template v-if="selectedCategoryId === category.id">
-                <div class="ml-4 mt-2 space-y-2">
+                <div class="ml-4 mt-2 space-y-2 max-sm:absolute">
                   <div class="bg-[#5D5D5D] rounded-2xl py-4 w-[116%]">
                     <button
                       class="text-white text-sm px-1 py-1 rounded w-full"
@@ -109,18 +110,34 @@
           />
         </div>
       </div>
-    </div>
 
-    <CreateProductModal
-      v-model="showModal"
-      @success="fetchProducts"
-    />
+      <div class="hidden max-sm:flex justify-around my-6">
+        <nuxt-link
+          class="bg-gray-secondary text-white px-6 py-2 rounded-full max-w-[100px] text-[11px] flex items-center justify-center"
+          to="/admin/create"
+        >
+          Добавить запчасть
+        </nuxt-link>
+        <nuxt-link
+          to="/admin/dashboard"
+          class="bg-gray-secondary text-white px-6 py-2 rounded-full max-w-[100px] text-[11px] flex items-center justify-center"
+        >
+          Дашборд
+        </nuxt-link>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <FilterBar
+          v-model="selectedFilters"
+          :filters="filters"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch } from "vue";
-import CreateProductModal from "~/components/admin/CreateProductModal.vue";
 import ProductRow from "~/components/admin/ProductRow.vue";
 import FilterBar from "~/components/category/FilterBar.vue";
 import { useNotification } from "~/shared/utils/useNotification";
