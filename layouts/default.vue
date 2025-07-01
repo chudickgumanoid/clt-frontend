@@ -19,14 +19,14 @@ import { LazyMainFooter } from "#components";
   min-height: 100vh;
 
   background-image: url("/img/background.jpg");
-  /** background: #000; **/
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
-
 .content {
   flex: 1;
   padding: 60px 0 24px 0;
 }
 </style>
+

@@ -87,7 +87,7 @@
                   class="max-sm:w-auto"
                 >
                   <CategoryTag
-                    :label="category.name"
+                    :label="t(category.i18nKey)"
                     class="cursor-pointer"
                   />
                 </nuxt-link>
@@ -106,7 +106,7 @@
                   "
                 >
                   <CategoryTag
-                    :label="subcategory.name"
+                    :label="t(subcategory.i18nKey)"
                     class="cursor-pointer"
                   />
                 </nuxt-link>
@@ -163,8 +163,21 @@ const { data: filters } = await useAsyncData("filters", () =>
   $axios.get("/filters").then((r) => r.data)
 );
 
+function normalizeKey(russianString) {
+  return russianString
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zа-я0-9_]/gi, "");
+}
+
 const { data: categoryesData } = await useAsyncData("categoryes", () =>
-  $axios.get("/categoryes").then((r) => r.data)
+  $axios.get("/categoryes").then((r) =>
+    r.data.map((item) => ({
+      ...item,
+      i18nKey: normalizeKey(item.name),
+    }))
+  )
 );
 
 const { data: subcategoryes } = await useAsyncData(
@@ -173,7 +186,12 @@ const { data: subcategoryes } = await useAsyncData(
     if (!route.query.category) return [];
     return $axios
       .get("/subcategoryes", { params: { categoryId: route.query.category } })
-      .then((r) => r.data);
+      .then((r) =>
+        r.data.map((item) => ({
+          ...item,
+          i18nKey: normalizeKey(item.name),
+        }))
+      );
   },
   {
     watch: [() => route.query.category],

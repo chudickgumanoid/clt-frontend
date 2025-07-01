@@ -31,7 +31,7 @@
           <nuxt-link :to="$localePath(`/catalog?category=${category.id}`)">
             <CategoryTag
               class="!cursor-pointer"
-              :label="category.name"
+              :label="t(category.i18nKey)"
             />
           </nuxt-link>
         </template>
@@ -102,10 +102,22 @@ const fetchProducts = async (searchText = "") => {
   }
 };
 
+function normalizeKey(russianString) {
+  return russianString
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zа-я0-9_]/gi, "");
+}
+
 const fetchCategories = async () => {
   try {
     const { data } = await $axios.get("/categoryes");
-    categoryesData.value = data;
+
+    categoryesData.value = data.map((item) => ({
+      ...item,
+      i18nKey: normalizeKey(item.name),
+    }));
   } catch (error) {
     console.error("Error fetching categories:", error);
   }
