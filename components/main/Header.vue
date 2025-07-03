@@ -23,7 +23,7 @@
             alt="Адрес"
             class="max-sm:h-4 max-sm:w-4"
           />
-          {{ $t("Адрес") }}
+          Алматы
         </div>
         <div
           class="flex items-center justify-center gap-3 max-sm:gap-2 text-3xl max-sm:text-[10px]"
