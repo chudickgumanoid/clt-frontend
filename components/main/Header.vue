@@ -4,7 +4,7 @@
       class="container max-sm:items-center flex justify-between gap-10 py-8 max-sm:!py-6"
     >
       <nuxt-link
-        to="/"
+        to="/admin/login"
         class="max-sm:max-w-[120px]"
       >
         <img
@@ -33,7 +33,7 @@
             alt="Телефон"
             class="max-sm:h-4 max-sm:w-4"
           />
-          {{ $t("Телефон") }}
+          <a href="https://wa.me/77085707063"> +7 708 570 7063 </a>
         </div>
       </div>
     </div>
