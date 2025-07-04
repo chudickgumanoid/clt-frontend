@@ -9,7 +9,7 @@
             <div class="flex gap-6">
               <nuxt-link
                 :to="$localePath('/')"
-                class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2 max-sm:w-fit"
+                class="bg-gray-secondary text-white px-8 py-2 rounded-4xl text-2xl hover:bg-primary transition-all max-sm:text-base max-sm:px-4 max-sm:py-2 max-sm:w-fit h-fit"
               >
                 {{ $t("Назад") }}
               </nuxt-link>

@@ -33,6 +33,8 @@ export default defineNuxtConfig({
     display: "swap",
   },
 
+  ssr: false,
+
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_URL,

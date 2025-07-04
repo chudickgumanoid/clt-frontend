@@ -7,12 +7,13 @@
       <div
         class="bg-[#2C2C2C]/95 text-white relative rounded-3xl px-10 py-8 max-w-[480px] text-center flex flex-col items-center gap-6"
       >
-        <button
+        <nuxt-link
+          :to="$localePath(`/`)"
           class="absolute top-4 right-4 text-white text-3xl"
           @click="$emit('close')"
         >
           &times;
-        </button>
+        </nuxt-link>
 
         <p class="text-xl">
           {{

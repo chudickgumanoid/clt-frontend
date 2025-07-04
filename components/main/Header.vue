@@ -5,11 +5,12 @@
     >
       <nuxt-link
         to="/admin/login"
-        class="max-sm:max-w-[120px]"
+        class="max-sm:max-w-[120px] max-h-[42px]"
       >
         <img
-          src="/img/logo.svg"
+          src="/img/logo.png"
           alt="CLT Логотип"
+          class="max-h-[42px]"
         />
       </nuxt-link>
 

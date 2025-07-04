@@ -15,6 +15,7 @@ body,
   margin: 0;
   padding: 0;
   height: 100dvh;
+  scroll-behavior: auto !important;
   overflow-x: hidden;
   background: #fff;
   font-family: 'Roboto', sans-serif;

@@ -24,9 +24,14 @@ import { LazyMainFooter } from "#components";
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+@media (max-width: 500px) {
+  .layout-wrapper {
+    background-image: url("/img/background-mobile.jpg");
+  }
+}
 .content {
   flex: 1;
   padding: 60px 0 24px 0;
 }
 </style>
-
