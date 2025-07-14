@@ -167,8 +167,10 @@ function normalizeKey(russianString) {
   return russianString
     .toLowerCase()
     .replace(/ё/g, "е")
-    .replace(/\s+/g, "_")
-    .replace(/[^a-zа-я0-9_]/gi, "");
+    .replace(/[\u00A0\u2000-\u200B]/g, " ")
+    .replace(/[^a-zа-я0-9\s]/gi, "")
+    .trim()
+    .replace(/\s+/g, "_");
 }
 
 const { data: categoryesData } = await useAsyncData("categoryes", () =>
@@ -189,7 +191,7 @@ const { data: subcategoryes } = await useAsyncData(
       .then((r) =>
         r.data.map((item) => ({
           ...item,
-          i18nKey: normalizeKey(item.name),
+          i18nKey: item.name,
         }))
       );
   },

@@ -106,7 +106,7 @@ function normalizeKey(russianString) {
   return russianString
     .toLowerCase()
     .replace(/ё/g, "е")
-    .replace(/\s+/g, "_")
+    .replace(/\s+/g, " ")
     .replace(/[^a-zа-я0-9_]/gi, "");
 }
 
