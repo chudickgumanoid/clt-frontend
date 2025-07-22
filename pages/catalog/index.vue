@@ -175,7 +175,7 @@ function normalizeKey(russianString) {
 
 const { data: categoryesData } = await useAsyncData("categoryes", () =>
   $axios.get("/categoryes").then((r) =>
-    r.data.map((item) => ({
+    r.data.filter(item => item.name !== "Аксессуары").map((item) => ({
       ...item,
       i18nKey: normalizeKey(item.name),
     }))

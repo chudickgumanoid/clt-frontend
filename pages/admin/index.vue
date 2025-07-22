@@ -161,7 +161,7 @@ const { data: filters } = await useAsyncData("filters", () =>
 );
 
 const { data: categoryesData } = await useAsyncData("categoryes", () =>
-  $axios.get("/categoryes").then((r) => r.data)
+  $axios.get("/categoryes").then((r) => r.data.filter(item => item.name !== "Аксессуары"))
 );
 
 const { data: subcategoryes } = await useAsyncData(

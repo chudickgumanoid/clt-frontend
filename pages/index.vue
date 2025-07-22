@@ -24,13 +24,11 @@
       </div>
 
       <div class="flex flex-wrap gap-3 my-4 max-sm:grid max-sm:grid-cols-3">
-        <template
-          v-for="category in categoryesData"
-          :key="category"
-        >
+        <template v-for="category in categoryesData" :key="category.id">
           <nuxt-link :to="$localePath(`/catalog?category=${category.id}`)">
             <CategoryTag
               class="!cursor-pointer"
+              :style="category.name === 'Автоаксессуары' ? 'background-color: #c5942e; color: white;' : ''"
               :label="t(category.i18nKey)"
             />
           </nuxt-link>
@@ -114,7 +112,7 @@ const fetchCategories = async () => {
   try {
     const { data } = await $axios.get("/categoryes");
 
-    categoryesData.value = data.map((item) => ({
+    categoryesData.value = data.filter(item => item.name !== "Аксессуары").map((item) => ({
       ...item,
       i18nKey: normalizeKey(item.name),
     }));
