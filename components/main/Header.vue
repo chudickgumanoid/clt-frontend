@@ -14,7 +14,15 @@
         />
       </nuxt-link>
 
+        
+
       <div class="flex items-center justify-center gap-10 max-sm:gap-4">
+        <div
+  class="flex items-center text-primary font-bicubik text-2xl w-full max-sm:text-[10px]"
+>
+  {{ t("Скорость - наш конёк") }}
+</div>
+
         <LangSwitcher />
         <div
           class="flex items-center justify-center gap-3 max-sm:gap-2 text-3xl max-sm:text-[10px]"

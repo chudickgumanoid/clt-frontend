@@ -5,13 +5,13 @@
         <div
           class="text-primary font-bicubik text-2xl mb-6 w-full max-sm:text-[10px] max-sm:mb-0"
         >
-          {{ t("Скорость - наш конёк") }}
+          
         </div>
 
         <div class="flex justify-between items-center gap-12">
           <MInput
             v-model="search"
-            :placeholder="t('поиск')"
+            :placeholder="t('запчасть/part-номер/марка/модель')"
             class="max-sm:max-h-[28px] max-sm:text-[15px] max-sm:pl-2"
           />
           <nuxt-link
